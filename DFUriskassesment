@@ -1,0 +1,3545 @@
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AssessDFUrisk&SaveTheLimbs</title>
+  <style>
+    :root{
+      --bg:#f4f8fb; --card:#fff; --soft:#f8fbfd; --text:#163042; --muted:#5f7382;
+      --border:#d8e5ee; --primary:#0f6c81; --primary2:#1d9bb3; --danger:#b42318;
+      --dangerSoft:#fff4f2; --success:#0f7b6c; --warning:#b54708; --shadow:0 10px 28px rgba(15,52,70,.08);
+      --radius:18px;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;font-family:Inter,Arial,sans-serif;color:var(--text);line-height:1.5;
+      background:radial-gradient(circle at top right, rgba(29,155,179,.08), transparent 25%),linear-gradient(180deg,#f8fbfd 0%,#eef5f9 100%);
+    }
+    .container{max-width:1500px;margin:0 auto;padding:20px}
+    .hidden{display:none!important}
+    .hero{
+      background:linear-gradient(135deg,var(--primary),var(--primary2));color:#fff;border-radius:24px;padding:24px;
+      box-shadow:var(--shadow);margin-bottom:18px;position:relative;overflow:hidden
+    }
+    .hero:after{content:"";position:absolute;right:-55px;bottom:-95px;width:260px;height:260px;border-radius:50%;background:rgba(255,255,255,.08)}
+    .hero h1,.hero p,.hero .credit,.hero .chips{position:relative;z-index:1}
+    .hero h1{margin:0 0 8px;font-size:30px;letter-spacing:-.02em}
+    .credit{margin-top:8px;font-size:14px;opacity:.95}
+    .adapted-credit{font-size:10px;opacity:.92;display:inline-block}
+    .chips{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .chip{padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.18);font-size:13px}
+    .card{
+      background:var(--card);border:1px solid rgba(216,229,238,.95);border-radius:var(--radius);
+      box-shadow:0 6px 18px rgba(15,52,70,.05);padding:18px;margin-bottom:16px
+    }
+    .title-row{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+    .small{font-size:14px;color:var(--muted)}
+    .info-note,.warning-note{
+      padding:12px 14px;border-radius:14px;font-size:14px;font-weight:700;margin-top:12px
+    }
+    .info-note{background:#f4fbfc;border:1px solid #cce3ea;color:#0a5160}
+    .warning-note{background:#fff9f0;border:1px solid #f2dfb3;color:#7c6616}
+    .disclaimer-note{padding:12px 14px;border-radius:14px;font-size:14px;font-weight:700;margin-top:12px;background:#fff6f5;border:1px solid #f3d3cf;color:var(--danger)}
+    .logic-table{width:100%;border-collapse:separate;border-spacing:0;margin-top:12px;overflow:hidden;border:1px solid #d9e7ee;border-radius:16px}
+    .logic-table th,.logic-table td{padding:11px 12px;border-bottom:1px solid #e5eef3;vertical-align:top;font-size:13px;text-align:left}
+    .logic-table th{background:#f4fbfc;color:#11435a;font-weight:900}
+    .logic-table tr:last-child td{border-bottom:none}
+    .legend-note{margin-top:10px;padding:10px 12px;border-radius:12px;background:#fff8f6;border:1px solid #f2d1ca;color:#8a4c42;font-size:13px;font-weight:800}
+    .resource-links{margin-top:12px;padding-top:12px;border-top:1px dashed #d8e5ee;font-size:13px}
+    .resource-links a{color:var(--primary);font-weight:800;text-decoration:none}
+    .resource-links a:hover{text-decoration:underline}
+    .soft-panel{margin-top:16px;padding:14px;border-radius:16px;background:linear-gradient(180deg,#f7fbfd,#ffffff);border:1px solid #d8e5ee}
+    .soft-panel h3{margin:0 0 6px;font-size:16px;color:#11435a}
+    .soft-panel .small{margin-bottom:10px}
+    .hero{border:1px solid rgba(255,255,255,.14)}
+    .hero:before{content:"";position:absolute;left:-40px;top:-40px;width:150px;height:150px;border-radius:24px;background:linear-gradient(135deg,rgba(255,255,255,.16),rgba(255,255,255,0));transform:rotate(25deg)}
+    .card{position:relative;overflow:hidden}
+    .card:before{content:"";position:absolute;left:0;top:0;width:100%;height:4px;background:linear-gradient(90deg,var(--primary),rgba(29,155,179,.2))}
+    h2,h3{letter-spacing:-.01em}
+    .medical-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:12px}
+    .medical-tile{padding:10px 12px;border-radius:14px;background:#f8fbfd;border:1px solid #dce8ef;font-size:13px;font-weight:800;color:#205062;text-align:center}
+    .accent-foot{box-shadow:inset 0 0 0 1px rgba(15,108,129,.08), 0 8px 18px rgba(15,52,70,.04)}
+
+    .layout{display:grid;grid-template-columns:360px minmax(0,1fr);gap:16px;align-items:start}
+    .main-grid{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(320px,.78fr) minmax(340px,.92fr);gap:16px;align-items:start}
+    .clinical-column,.report-column{display:grid;gap:16px;align-self:start}
+    .report-column{position:sticky;top:16px}
+    .report-card .report-box{min-height:520px;max-height:72vh}
+    .report-card:before{background:linear-gradient(90deg,#1d9bb3,rgba(29,155,179,.18))}
+    .report-card h3{margin-bottom:10px}
+    .report-intro{margin-bottom:10px;padding:10px 12px;border-radius:12px;background:#f4fbfc;border:1px solid #d6e8ef;color:#215064;font-size:13px;font-weight:700}
+    .patient-side{position:sticky;top:16px;align-self:start}
+    .field-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+    .field-grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+    .field{display:grid;gap:6px}
+    .field label{font-size:13px;font-weight:800;color:#365062}
+    input,select,textarea{
+      width:100%;border:1px solid var(--border);border-radius:12px;padding:12px 13px;font-size:14px;font-family:inherit;
+      color:var(--text);background:#fff;transition:border-color .2s ease,box-shadow .2s ease
+    }
+    textarea{min-height:95px;resize:vertical}
+    input:focus,select:focus,textarea:focus{outline:none;border-color:var(--primary2);box-shadow:0 0 0 4px rgba(29,155,179,.12)}
+    .toolbar{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    button{
+      border:1px solid var(--border);border-radius:12px;padding:10px 14px;background:#fff;font-weight:800;font-size:14px;color:var(--text);
+      cursor:pointer;box-shadow:0 2px 8px rgba(15,52,70,.04);transition:.15s ease
+    }
+    button:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(15,52,70,.08)}
+    button.primary{background:var(--primary);border-color:var(--primary);color:#fff}
+    button.secondary{background:#f4fbfc;border-color:#cce3ea;color:#0a5160}
+    button.danger-lite{background:#fff6f5;border-color:#f3d3cf;color:var(--danger)}
+    .status{margin-top:10px;min-height:18px;font-size:13px;font-weight:800;color:var(--success)}
+    .auth-box{max-width:560px;margin:50px auto}
+    .auth-title{margin-bottom:8px;font-size:24px;font-weight:900;color:#11435a}
+    .tabs{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+    .domain{border:1px solid #dce8f0;border-radius:18px;overflow:hidden;margin-bottom:18px;background:linear-gradient(180deg,#fcfeff,#f8fbfd)}
+    .domain-head{padding:16px;background:linear-gradient(180deg,#fff4f2,#fffdfd);border-bottom:1px solid #f2d1ca}
+    .domain-kicker{font-size:12px;text-transform:uppercase;font-weight:900;letter-spacing:.04em;color:var(--danger);margin-bottom:8px}
+    .domain-title{color:var(--danger);font-size:19px;font-weight:900;margin-bottom:6px}
+    .domain-desc{color:#8a4c42;font-size:14px}
+    .subsection-title{font-size:14px;color:var(--danger);background:var(--dangerSoft);border:1px solid #f2d1ca;border-radius:999px;display:inline-block;padding:8px 12px;margin:14px 14px 4px;font-weight:900}
+    .questions-wrap{padding:10px 12px 14px}
+    .question{background:#fff;border:1px solid #e4edf3;border-radius:16px;padding:14px;margin-bottom:10px}
+    .question.highlight{border-color:#efb6a8;background:#fff8f6}
+    .question-top{display:flex;gap:10px;align-items:flex-start}
+    .qnum{min-width:32px;height:32px;display:inline-flex;align-items:center;justify-content:center;border-radius:999px;background:#eef4ff;border:1px solid #dae7fb;color:#354a5f;font-size:12px;font-weight:900;padding:0 10px;flex-shrink:0}
+    .qnum.highlight{background:var(--danger);border-color:var(--danger);color:#fff}
+    .qtext{font-size:14px;padding-top:2px}
+    .btns{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .answer-btn.active-yes{background:var(--primary);border-color:var(--primary);color:#fff}
+    .answer-btn.active-no{background:#eef5f7;border-color:#cfe2e7;color:#204556}
+    .summary-block{display:grid;gap:10px}
+    .summary-line{display:flex;justify-content:space-between;gap:10px;padding:8px 0;border-bottom:1px dashed #e0eaf0;font-size:14px}
+    .summary-line:last-child{border-bottom:none}
+    .summary-label{color:var(--muted);font-weight:800}
+    .summary-value{font-weight:700;text-align:right}
+    .progress-box{margin-top:12px;padding:14px;border-radius:16px;border:1px solid #d9eaf0;background:linear-gradient(180deg,#f5fbfd,#fff)}
+    .progress-top{display:flex;justify-content:space-between;gap:12px;margin-bottom:8px;font-size:13px;color:var(--muted);font-weight:800}
+    .progress-bar{height:12px;background:#e7f0f4;border-radius:999px;overflow:hidden}
+    .progress-fill{height:100%;width:0%;background:linear-gradient(90deg,var(--primary),var(--primary2));border-radius:999px;transition:width .2s ease}
+    .score-label{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.05em;color:var(--muted)}
+    .score{font-size:32px;font-weight:900;color:#0a5160}
+    .score.urgent{color:var(--danger)}
+    .risk-strip{font-size:14px;font-weight:800;padding:10px 12px;border-radius:12px;background:#f4fbfc;color:#0a5160;border:1px solid #d2e9ef}
+    .badge-wrap{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+    .badge{border-radius:999px;border:1px solid #dde9ef;background:#f2f7fa;padding:7px 10px;font-size:12px;font-weight:800;color:#365367}
+    .list-box{background:#fbfdff;border:1px solid #e4edf3;border-radius:14px;padding:12px;min-height:54px}
+    .plan-box{background:linear-gradient(180deg,#f6fbff,#fff);border:1px solid #dbeaf3;border-radius:16px;padding:14px}
+    .plan-title{font-size:16px;font-weight:900;color:#11435a;margin-bottom:8px}
+    .plan-text{white-space:pre-wrap;font-size:14px}
+    .follow-up{margin-top:10px;color:var(--success);font-weight:900;font-size:14px}
+    .report-box{white-space:pre-wrap;background:#f7fbfd;border:1px solid #e1ebf1;border-radius:14px;padding:14px;max-height:460px;overflow:auto;font-size:14px}
+    .patient-list{display:grid;gap:10px;max-height:72vh;overflow:auto}
+    .patient-item{border:1px solid #e3ecf1;border-radius:14px;padding:12px;background:#fff}
+    .patient-item.active{border-color:#9fd0da;background:#f7fcfd}
+    .patient-item h4{margin:0 0 4px;font-size:15px}
+    .pill{display:inline-flex;padding:5px 10px;border-radius:999px;background:#eef7fa;border:1px solid #d8eaf0;color:#215266;font-size:12px;font-weight:900;margin-top:6px}
+    .pill.archived{background:#f6f6f7;border-color:#e1e1e3;color:#666}
+    .quick-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+    @media print{
+      .toolbar,.no-print,#authScreen,.patient-side{display:none!important}
+      body{background:#fff}.card,.domain{box-shadow:none}.report-box{max-height:none;overflow:visible}
+    }
+    @media (max-width:1400px){.main-grid{grid-template-columns:minmax(0,1.15fr) minmax(300px,.85fr) minmax(320px,.95fr)}}
+    @media (max-width:1180px){.layout,.main-grid{grid-template-columns:1fr}.patient-side,.report-column{position:static}.report-card .report-box{min-height:unset;max-height:none}}
+    @media (max-width:900px){.field-grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+    @media (max-width:900px){.medical-grid{grid-template-columns:1fr}}
+    @media (max-width:640px){
+      .container{padding:12px}.hero{padding:18px}.hero h1{font-size:24px}
+      .field-grid,.field-grid-4,.quick-actions{grid-template-columns:1fr}
+      button{flex:1 1 calc(50% - 10px);min-width:unset}
+    }
+  
+    .auth-shell{max-width:1220px}
+    .hero-medical{
+      display:grid;grid-template-columns:1.15fr .85fr;gap:20px;align-items:stretch;
+      background:
+        radial-gradient(circle at 18% 18%, rgba(255,255,255,.18), transparent 20%),
+        radial-gradient(circle at 85% 25%, rgba(255,255,255,.14), transparent 18%),
+        linear-gradient(135deg, rgba(6,68,88,.98), rgba(20,129,150,.95));
+      position:relative;
+      overflow:hidden;
+    }
+    .hero-medical:before{
+      content:"";position:absolute;inset:0;
+      background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180' viewBox='0 0 180 180'%3E%3Cg fill='none' stroke='rgba(255,255,255,0.11)' stroke-width='2'%3E%3Cpath d='M28 35h20v20h16V35h20V19H64V0H48v19H28z'/%3E%3Cpath d='M102 111c18-24 34-28 52-28 0 0-8 12-8 25 0 17 10 28 10 28-18 0-34 3-54 28-19-25-36-28-54-28 0 0 10-11 10-28 0-13-8-25-8-25 18 0 34 4 52 28z'/%3E%3Cpath d='M0 142h42l10-20 14 38 18-56 16 38h80'/%3E%3C/g%3E%3C/svg%3E");
+      background-size:220px 220px;opacity:.35;mix-blend-mode:screen;pointer-events:none;
+    }
+    .hero-medical .hero-copy,.hero-medical .hero-visual{position:relative;z-index:1}
+    .hero-copy p{max-width:700px}
+    .hero-visual{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px;align-content:center}
+    .hero-stat{background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.18);border-radius:18px;padding:16px;backdrop-filter: blur(6px)}
+    .hero-stat strong{display:block;font-size:15px;margin-bottom:6px}
+    .hero-stat span{font-size:13px;opacity:.92}
+    .auth-card{margin-top:0}
+    .or-divider{display:flex;align-items:center;gap:12px;margin:18px 0;color:var(--muted);font-weight:800;font-size:13px;text-transform:uppercase;letter-spacing:.04em}
+    .or-divider:before,.or-divider:after{content:"";height:1px;flex:1;background:#d8e5ee}
+    .auth-callout{margin-top:14px;padding:14px 16px;border-radius:16px;background:#f5fbfd;border:1px solid #d5e8ef;color:#225163}
+    .hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .hero-actions button{background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.18);color:#fff}
+    .hero-actions button.active{background:#fff;color:var(--primary);border-color:#fff}
+    #workspaceScreen.hidden,#directoryScreen.hidden{display:none!important}
+    .workspace-card .quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+    .current-patient-hub{display:grid;gap:12px}
+    .hub-empty{padding:18px;border-radius:18px;border:1px dashed #c6d9e4;background:linear-gradient(180deg,#fbfdfe,#f5fbfd)}
+    .hub-patient{padding:16px;border-radius:18px;background:linear-gradient(180deg,#f8fdff,#eff7fb);border:1px solid #d9e8f1}
+    .hub-patient h3{margin:0 0 6px;font-size:20px;color:#103d52}
+    .hub-meta{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:10px}
+    .hub-meta .mini{padding:10px 12px;border-radius:14px;background:#fff;border:1px solid #e0eaf0;font-size:13px}
+    .hub-meta .mini strong{display:block;color:#5d7381;font-size:12px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:4px}
+    .section-kicker{font-size:12px;font-weight:900;letter-spacing:.08em;text-transform:uppercase;color:#5d7381;margin-bottom:6px}
+    .directory-screen{margin-top:18px}
+    .modal-backdrop{position:fixed;inset:0;background:rgba(10,30,40,.45);display:flex;align-items:center;justify-content:center;padding:18px;z-index:1000;backdrop-filter:blur(3px)}
+    .modal-card{width:min(760px,100%);max-height:88vh;overflow:auto;background:linear-gradient(180deg,#fbfeff,#f4fafc);border:1px solid #d7e6ee;border-radius:24px;box-shadow:0 24px 60px rgba(13,53,72,.18);padding:22px}
+    .backup-badge{display:inline-flex;align-items:center;gap:8px;padding:9px 12px;border-radius:999px;background:#eef8fb;border:1px solid #d7eaf1;color:#1f5f73;font-size:12px;font-weight:800;margin-top:10px}
+    .directory-toolbar{display:grid;grid-template-columns:minmax(280px,1.4fr) repeat(2,minmax(180px,.6fr)) auto;gap:12px;align-items:end;margin-top:14px}
+    .alphabet-bar{display:grid;grid-template-columns:repeat(14,minmax(0,1fr));gap:8px;margin-top:14px}
+    .alpha-btn{padding:9px 0;border-radius:12px;font-size:13px;font-weight:900}
+    .alpha-btn.active-alpha{background:var(--primary);color:#fff;border-color:var(--primary)}
+    .directory-stats{display:flex;gap:10px;flex-wrap:wrap;margin-top:14px}
+    .directory-stat{padding:10px 12px;border-radius:999px;background:#f3f9fc;border:1px solid #d7e7ef;color:#1f5366;font-size:12px;font-weight:900}
+    .directory-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin-top:16px}
+    .directory-card{border:1px solid #dbe7ef;border-radius:20px;padding:16px;background:#fff;box-shadow:0 8px 18px rgba(15,52,70,.04)}
+    .directory-card.active{border-color:#99cbd9;background:linear-gradient(180deg,#fbfeff,#f5fbfd)}
+    .directory-head{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}
+    .directory-head h4{margin:0;font-size:18px}
+    .directory-sub{font-size:13px;color:var(--muted);margin-top:4px}
+    .directory-badges{display:flex;gap:8px;flex-wrap:wrap;margin-top:10px}
+    .directory-history{margin-top:12px;padding-top:12px;border-top:1px dashed #dde8ef}
+    .history-mini{display:grid;gap:8px;margin-top:8px}
+    .history-row{display:flex;justify-content:space-between;gap:10px;padding:9px 10px;border-radius:12px;background:#f8fbfd;border:1px solid #e5edf2;font-size:13px}
+    .history-row span:last-child{text-align:right}
+    .card.medical-soft{background:linear-gradient(180deg,#fbfeff,#f6fbfd)}
+    .data-tools-inline{display:flex;gap:10px;flex-wrap:wrap;margin-top:10px}
+    @media (max-width:1180px){.hero-medical{grid-template-columns:1fr}.directory-grid{grid-template-columns:1fr}.alphabet-bar{grid-template-columns:repeat(9,minmax(0,1fr))}.directory-toolbar{grid-template-columns:1fr 1fr;}.hub-meta{grid-template-columns:1fr 1fr}}
+    @media (max-width:720px){.directory-toolbar{grid-template-columns:1fr}.alphabet-bar{grid-template-columns:repeat(6,minmax(0,1fr))}.hub-meta{grid-template-columns:1fr}.hero-actions{flex-direction:column}.hero-actions button{width:100%}}
+
+
+
+    /* refined medical workspace layout */
+    :root{
+      --bg:#f3f6f8; --card:#ffffff; --soft:#f7fafb; --text:#18313f; --muted:#617381;
+      --border:#d7e1e8; --primary:#2a697a; --primary2:#6f9dac; --danger:#b03d2e;
+      --dangerSoft:#fff7f5; --success:#2f6f5f; --warning:#9a6c12;
+      --shadow:0 10px 26px rgba(21,54,71,.06); --radius:18px;
+    }
+    body{
+      background:linear-gradient(180deg,#f7fafb 0%,#eef3f6 100%);
+    }
+    .container{max-width:1820px;padding:18px 14px 22px}
+    .hero{
+      background:linear-gradient(135deg,#2a697a,#6e97a4);
+      box-shadow:0 14px 32px rgba(21,54,71,.10);
+      margin-bottom:20px;
+    }
+    .chip{background:rgba(255,255,255,.18)}
+    .card{
+      border:1px solid rgba(215,225,232,.98);
+      box-shadow:0 8px 20px rgba(21,54,71,.045);
+      padding:20px;
+    }
+    .card:before{height:3px;background:linear-gradient(90deg,#c7d9e0,rgba(111,157,172,.15))}
+    .medical-soft,.hub-patient,.plan-box,.report-box,.list-box,.progress-box,.directory-card,.patient-item,.question{
+      box-shadow:none;
+    }
+    .layout{grid-template-columns:280px minmax(0,1fr);gap:16px}
+    .main-grid{
+      grid-template-columns:minmax(0,1.9fr) 430px;
+      gap:18px;
+      align-items:start;
+    }
+    .main-grid > :first-child{grid-column:1;grid-row:1 / span 2;min-width:0}
+    .clinical-column{grid-column:2;grid-row:1;display:grid;gap:14px;align-content:start;min-width:0}
+    .report-column{grid-column:2;grid-row:2;display:grid;gap:14px;align-content:start;position:static;min-width:0}
+    .patient-side{top:16px}
+    .report-card{
+      background:linear-gradient(180deg,#fbfdfe 0%,#f4f8fa 100%);
+      border-color:#cfdce4;
+    }
+    .report-card:before{background:linear-gradient(90deg,var(--primary),rgba(111,157,172,.24))}
+    .report-card h3{margin:0 0 8px;font-size:22px;color:#143847}
+    .report-intro{
+      margin-bottom:12px;padding:12px 14px;border-radius:14px;
+      background:#f3f8fa;border:1px solid #d7e4ea;color:#48606d;font-size:13px;font-weight:700;
+    }
+    .report-box{
+      min-height:70vh;max-height:78vh;background:#fff;border:1px solid #d8e2e8;
+      line-height:1.68;font-size:13.5px;padding:18px 20px;
+    }
+    .clinical-column .card h2,.clinical-column .card h3{margin-top:0;color:#173847}
+    .summary-block{gap:8px}
+    .summary-line{padding:9px 0}
+    .score-label{color:#6b7a86}
+    .score{font-size:36px}
+    .risk-strip{
+      background:#f3f8fa;border-color:#d7e4ea;color:#1d4b5a;
+      line-height:1.45;
+    }
+    .badge{background:#f5f8fa;border-color:#dae4ea;color:#45606e}
+    .list-box{background:#fbfcfd;border-color:#e1e8ed;line-height:1.6}
+    .plan-box{background:linear-gradient(180deg,#f9fcfd,#fff);border-color:#dbe5eb;padding:16px}
+    .plan-title{font-size:17px}
+    .plan-text{line-height:1.7}
+    .follow-up{padding-top:10px;border-top:1px dashed #d9e3e8}
+    .question{padding:18px;border-radius:18px;background:#fff}
+    .question.highlight{border-color:#e8c2b8;background:#fffaf8}
+    .qtext{line-height:1.55}
+    .toolbar{gap:8px}
+    button{border-radius:11px;padding:10px 14px}
+    .primary{background:#2a697a;border-color:#2a697a}
+    .secondary{background:#f3f8fa;border-color:#d6e3e9;color:#204d5a}
+    .danger-lite{background:#fff7f5;border-color:#ecd1cb;color:#ab3a2d}
+    .workspace-card .quick-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}.question{padding:14px}.qtext{font-size:15px;line-height:1.55}.report-card .report-box{max-height:72vh}
+    .workspace-card .quick-actions button{min-height:58px}
+        .recovery-question{margin-top:12px;padding:14px;border-radius:16px;background:#fbfdfe;border:1px solid #d7e3ea}
+    .recovery-question h4{margin:0 0 6px;font-size:15px;color:#174252}
+    .recovery-question .small{line-height:1.55}
+    .recovery-chip-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    .recovery-chip{padding:12px 14px;border-radius:14px;background:#f7fbfd;border:1px solid #d8e5ec}
+    .recovery-chip strong{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.04em;color:#6a808c;margin-bottom:6px}
+    .field-grid-4{gap:14px}
+    input,select,textarea{background:#fcfefe}
+    .section-kicker{color:#68808c}
+    .legend-note,.info-note,.warning-note,.disclaimer-note{font-weight:800}
+    .auth-card{max-width:760px;margin:0 auto 14px}
+
+    @media print{
+      .hero,.patient-side,.directory-screen,.no-print,.toolbar,#authScreen{display:none !important}
+      #appScreen,.layout,.main-grid,.clinical-column,.report-column{display:block !important}
+      .card{box-shadow:none;border-color:#ccd6dc;page-break-inside:avoid}
+      .report-column{position:static}
+      .report-card{margin-top:0}
+      .report-intro{display:none}
+      .report-box{min-height:unset;max-height:none;overflow:visible;border:none;padding:0;background:#fff}
+      .clinical-column>.card:not(.report-card){display:none}
+    }
+    @media (max-width:1500px){
+      .layout{grid-template-columns:270px minmax(0,1fr)}
+      .main-grid{grid-template-columns:minmax(0,1.75fr) 390px}
+    }
+    @media (max-width:1320px){
+      .main-grid{grid-template-columns:minmax(0,1.55fr) 360px}
+    }
+    @media (max-width:1180px){
+      .layout,.main-grid{grid-template-columns:1fr}
+      .main-grid > :first-child,
+      .clinical-column,
+      .report-column{grid-column:auto;grid-row:auto}
+      .report-column,.patient-side{position:static;top:auto}
+      .report-box{min-height:unset;max-height:none;overflow:visible}
+    }
+    @media (max-width:720px){
+      .container{padding:14px}
+      .card{padding:16px;overflow:visible}
+      .report-intro{font-size:12px}
+      .layout,.main-grid,.clinical-column,.report-column{display:block}
+      .patient-side,.clinical-column,.report-column{margin-bottom:16px}
+      .workspace-card .quick-actions{grid-template-columns:1fr}
+      .report-card .report-box{max-height:none;overflow:visible}
+    }
+
+    /* auth screen stability fixes */
+    #authScreen,
+    #authScreen .hero-medical,
+    #authScreen .auth-card,
+    #authScreen .field-grid,
+    #authScreen .toolbar,
+    #authScreen input,
+    #authScreen button,
+    #authScreen .small,
+    #authScreen .credit,
+    #authScreen .auth-title {
+      direction:ltr;
+    }
+    #authScreen .hero-copy,
+    #authScreen .auth-card,
+    #authScreen .field,
+    #authScreen .field label,
+    #authScreen .auth-title,
+    #authScreen .small,
+    #authScreen .status {
+      text-align:left;
+    }
+    #authScreen .hero-actions{justify-content:flex-start}
+
+
+    .education-game-card{
+      margin-top:14px;padding:16px;border-radius:16px;background:linear-gradient(180deg,#f4fbfc,#ffffff);
+      border:1px solid #cce3ea;text-align:center;
+    }
+    .education-game-card h4{margin:0 0 10px;color:#0f6c81;font-size:18px;font-weight:900}
+    .education-game-card a{display:block;color:#0f6c81;font-weight:800;text-decoration:none;word-break:break-all;margin:8px 0 12px}
+    .education-game-card a:hover{text-decoration:underline}
+    .education-game-card img{width:130px;height:130px;border-radius:12px;border:1px solid #d8e5ee;background:#fff;padding:6px}
+
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div id="authScreen" class="auth-box auth-shell">
+      <section class="hero hero-medical">
+        <div class="hero-copy">
+          <h1>AssessDFUrisk&amp;SaveTheLimbs <span style="font-weight:900;">***</span></h1>
+          <p id="authHeroText">Secure clinical tool for assessment of diabetes-related risk of foot ulceration, personalized culturally sensitive action plan, bilingual support and local device access control.</p>
+          <div class="credit">Developed by: Amal Y. Madanat MD PhD, Saqer R. Madanat Bac MIS — Amman-Jordan 2026</div>
+          <div class="hero-actions">
+            <button type="button" id="workspaceTabBtn" class="active" onclick="showAuthMode('login')">Log in</button>
+            <button type="button" id="directoryTabBtn" onclick="showAuthMode('signup')">First time setup</button>
+            <button type="button" onclick="showAuthMode('change')">Change password</button>
+            <button type="button" onclick="showAuthMode('forgot')">Emergency reset</button>
+          </div>
+        </div>
+        <div class="hero-visual">
+          <div class="hero-stat"><strong>Language support</strong><span>English and Arabic interface toggle is available in this version.</span></div>
+          <div class="hero-stat"><strong>Privacy</strong><span>Patient data are stored locally on the device/browser unless institutional remote sync is configured.</span></div>
+          <div class="hero-stat"><strong>Legal / clinical use</strong><span>This tool supports clinical decision-making and documentation; it does not replace physician judgment or institutional policy.</span></div>
+          <div class="hero-stat"><strong>Content integrity</strong><span>Users can enter patient data, but they cannot directly edit the embedded clinical guidance text inside the tool.</span></div>
+        </div>
+      </section>
+
+      <div class="card auth-card" id="loginPanel">
+        <div class="auth-title">Log in</div>
+        <div class="field-grid">
+          <div class="field"><label for="loginUsername">Username</label><input id="loginUsername" placeholder="Username"></div>
+          <div class="field"><label for="loginPassword">Password</label><input id="loginPassword" type="password" placeholder="Password"></div>
+        </div>
+        <div class="toolbar"><button class="primary" type="button" onclick="login()">Log in</button></div>
+        
+      </div>
+
+      <div class="card auth-card hidden" id="signupPanel">
+        <div class="auth-title">First time setup</div>
+        <div class="field-grid">
+          <div class="field"><label for="signupUsername">Username</label><input id="signupUsername" placeholder="Create username"></div>
+          <div class="field"><label for="signupPassword">Password</label><input id="signupPassword" type="password" placeholder="Create password"></div>
+        </div>
+        <div class="field" style="margin-top:12px;"><label for="signupConfirmPassword">Confirm password</label><input id="signupConfirmPassword" type="password" placeholder="Confirm password"></div>
+        <div class="small" style="margin-top:12px;">A one-time recovery code will be shown after account creation. Save it in a safe place.</div>
+        <div class="toolbar">
+          <button class="primary" type="button" onclick="signup()">Create account</button>
+          <button class="danger-lite" type="button" onclick="resetLocalAccountOnly()">Reset local account</button>
+        </div>
+      </div>
+
+      <div class="card auth-card hidden" id="changePasswordPanel">
+        <div class="auth-title">Change password</div>
+        <div class="field-grid">
+          <div class="field"><label for="changeUsername">Username</label><input id="changeUsername" placeholder="Username"></div>
+          <div class="field"><label for="currentPassword">Current password</label><input id="currentPassword" type="password" placeholder="Current password"></div>
+          <div class="field"><label for="newPassword">New password</label><input id="newPassword" type="password" placeholder="New password"></div>
+          <div class="field"><label for="confirmPassword">Confirm new password</label><input id="confirmPassword" type="password" placeholder="Confirm new password"></div>
+        </div>
+        <div class="toolbar">
+          <button class="primary" type="button" onclick="changePassword()">Save new password</button>
+          <button class="secondary" type="button" onclick="showRecoveryCode()">Show recovery code</button>
+          <button class="secondary" type="button" onclick="regenerateRecoveryCode()">Generate new recovery code</button>
+        </div>
+      </div>
+
+      <div class="card auth-card hidden" id="forgotPasswordPanel">
+        <div class="auth-title">Emergency reset while keeping patient data</div>
+        <div class="field-grid" style="margin-top:12px;">
+          <div class="field"><label for="emergencyUsername">Username</label><input id="emergencyUsername" placeholder="Username" oninput="updateRecoveryMode()"></div>
+          <div class="field"><label for="emergencyRecoveryCode">Recovery code</label><input id="emergencyRecoveryCode" placeholder="DFU-XXXX-XXXX-XXXX"></div>
+          <div class="field"><label for="emergencyNewPassword">New password</label><input id="emergencyNewPassword" type="password" placeholder="New password"></div>
+          <div class="field"><label for="emergencyConfirmPassword">Confirm new password</label><input id="emergencyConfirmPassword" type="password" placeholder="Confirm new password"></div>
+        </div>
+        <div id="legacyRecoveryBox" class="recovery-question hidden"></div>
+        <div class="toolbar"><button class="danger-lite" type="button" onclick="emergencyResetAccess()">Reset access</button></div>
+      </div>
+
+      <div id="authStatus" class="status"></div>
+    </div>
+
+    <div id="appScreen" class="hidden">
+
+      <section class="hero">
+        <h1>AssessDFUrisk&amp;SaveTheLimbs <span style="font-weight:900;">***</span></h1>
+        <p>Novel Artificial Intelligence Tool developed for Health Care Professionals to identify the patient’s risk category of diabetes-related foot ulceration (DFU), controllable metabolic-cardio-renal comorbidities, and modifiable risky foot-health behavior that are culturally sensitive for the population of the MENA region Countries and beyond. The tool provides a personalized plan of action to Health Care Provider and gamified education.</p>
+        <div class="credit">Developed by: Amal Y. Madanat MD PhD, Saqer R. Madanat Bac MIS — Amman-Jordan 2026<br><span class="adapted-credit">Adapted from: Miller J et al. <em>J Fam Pract.</em> 2014 Nov;63(11):646-56, with permission from the corresponding Author Professor Armstrong D.</span></div>
+        <div class="chips">
+          <span class="chip">🩺 Patient dashboard</span>
+          <span class="chip">🧾 Search &amp; filter</span>
+          <span class="chip">📚 Assessment history</span>
+          <span class="chip">💾 Auto backup active</span>
+        </div>
+      </section>
+
+      <div id="workspaceScreen" class="layout">
+        <div class="patient-side">
+          <div class="card workspace-card medical-soft">
+            <div class="title-row">
+              <div>
+                <div class="section-kicker" data-i18n="clinical_workspace">Clinical workspace</div>
+                <h2 data-i18n="current_patient_focus">Current patient focus</h2>
+                <div class="small" data-i18n="current_patient_focus_desc">The assessment page stays focused on the active patient only. Open the directory for the full patient list.</div>
+              </div>
+            </div>
+
+            <div id="currentPatientHub" class="current-patient-hub"></div>
+
+            <div class="quick-actions" style="margin-top:14px;">
+              <button class="primary" data-i18n="new_patient" onclick="startNewPatient()">New patient</button>
+              <button class="secondary" data-i18n="new_assessment" onclick="startNewAssessment()">New assessment</button>
+              <button class="secondary" data-i18n="clear_answers_only" onclick="clearQuestionAnswers()">Clear answers only</button>
+              <button class="secondary" data-i18n="patients_directory" onclick="showAppView('directory')">Patients directory</button>
+              <button class="secondary" data-i18n="restore_auto_backup" onclick="restoreAutoBackup()">Restore auto backup</button>
+              <button class="secondary" onclick="downloadFullBackup()">Download backup</button>
+              <button class="secondary" onclick="triggerBackupImport()">Import backup</button>
+              <button class="secondary" type="button" onclick="logout()" data-i18n="logout">Log out</button>
+                          </div>
+          </div>
+        </div>
+
+        <div>
+          <div class="card">
+            <div class="title-row">
+              <div>
+                <h2 data-i18n="patient_record_title">Patient Record</h2>
+                <div class="small" data-i18n="patient_record_desc">The Health Care Professional asks the patient, examines the feet, records answers, and the tool returns: risk category of DFU, metabolic-cardio-renal comorbidities, risky behavior factors to the feet, and plan of action to prevent limb loss.</div>
+              </div>
+              <div class="field" style="min-width:220px;">
+                <label for="languageSelect">Interface language</label>
+                <select id="languageSelect" onchange="setLanguage(this.value)">
+                  <option value="en">English</option>
+                  <option value="ar">العربية</option>
+                </select>
+              </div>
+            </div>
+
+            <div class="field-grid-4">
+              <div class="field">
+                <label for="assessmentDate">Assessment date *</label>
+                <input id="assessmentDate" type="date">
+              </div>
+              <div class="field">
+                <label for="patientName">Patient name *</label>
+                <input id="patientName" placeholder="Patient name">
+              </div>
+              <div class="field">
+                <label for="patientId">Patient ID *</label>
+                <input id="patientId" placeholder="Patient ID">
+              </div>
+              <div class="field">
+                <label for="patientAge">Age</label>
+                <input id="patientAge" placeholder="Age">
+              </div>
+              <div class="field">
+                <label for="patientGender">Gender</label>
+                <select id="patientGender">
+                  <option value="">Select gender</option>
+                  <option>Male</option>
+                  <option>Female</option>
+                </select>
+              </div>
+              <div class="field">
+                <label for="physician">Physician *</label>
+                <input id="physician" placeholder="Physician">
+              </div>
+              <div class="field">
+                <label for="clinic">Clinic</label>
+                <input id="clinic" placeholder="Clinic">
+              </div>
+              <div class="field">
+                <label for="visitLabel">Assessment label</label>
+                <input id="visitLabel" placeholder="Example: First visit / Follow-up">
+              </div>
+            </div>
+
+            <div class="field" style="margin-top:12px;">
+              <label for="patientNotes">Clinical notes</label>
+              <textarea id="patientNotes" placeholder="Optional clinical notes"></textarea>
+            </div>
+
+
+            <div class="toolbar">
+              <button class="primary" onclick="saveAssessment()">Save assessment</button>
+              <button class="secondary" onclick="window.print()">Print / Save PDF</button>
+              <button class="secondary" onclick="downloadReport()">Download report</button>
+              <button class="secondary" onclick="downloadFullBackup()">Download backup</button>
+              <button class="secondary" onclick="triggerBackupImport()">Import backup</button>
+              <button class="secondary" onclick="archiveCurrentPatient()">Archive patient</button>
+              <button class="danger-lite" onclick="resetForm()">Reset form</button>
+            </div>
+            <div id="status" class="status"></div>
+            <input id="backupImportFile" type="file" accept="application/json,.json" class="hidden" onchange="importBackupFile(event)">
+          </div>
+
+          <div class="main-grid">
+            <div>
+              <div class="card">
+                <div class="title-row">
+                  <div>
+                    <h2>Assessment Questions</h2>
+                    <div class="small">Questions are grouped by clinical section to make bedside use easier. Red markers show the pivotal questions used directly in the updated DFU risk-category logic dated 03/05/2026: urgent Q11/Q15/Q16/Q22/Q26; LOPS Q21; PAD Q14/Q26; deformity Q23/Q24; history Q1; ESRD Q7.</div>
+                  </div>
+                </div>
+                                <div id="questions"></div>
+              </div>
+            </div>
+
+            <div class="clinical-column">
+              <div class="card">
+                <h2 data-i18n="patient_summary">Patient Summary</h2>
+                <div id="summaryBlock" class="summary-block"></div>
+                <div class="progress-box">
+                  <div class="progress-top">
+                    <span data-i18n="assessment_progress">Assessment progress</span>
+                    <span id="progressText">0 / 60 answered</span>
+                  </div>
+                  <div class="progress-bar">
+                    <div id="progressFill" class="progress-fill"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="card">
+                <div class="score-label">1) DFU Risk Category</div>
+                <div id="score" class="score">0</div>
+                <div id="riskStrip" class="risk-strip">Category 0 — No LOPS and No PAD</div>
+                <div id="flags" class="badge-wrap"></div>
+              </div>
+
+              <div class="card">
+                <h3 data-i18n="metabolic_cardio_renal_risk_factors">2) Metabolic-Cardio-Renal Co-morbidities and Risk Factors</h3>
+                <div id="metabolic" class="list-box small">No selected factors yet.</div>
+              </div>
+
+              <div class="card">
+                <h3>3) Risky Foot-Health COM-Behavior</h3>
+                <div id="comb" class="list-box small">No selected COM-B risks yet.</div>
+              </div>
+
+              <div class="card">
+                <div class="title-row">
+                  <h3 data-i18n="detailed_plan_of_action">4) Detailed plan of action</h3>
+                </div>
+                <div class="plan-box">
+                  <div id="planTitle" class="plan-title">Very low Risk of DFU Score — Category 0</div>
+                  <div id="planText" class="plan-text">Prevent development or progression of neuropathy and PAD, address metabolic-cardio-renal risks, intervene on risky behavior factors, and empower self-management.</div>
+                  <div id="followUp" class="follow-up">Follow up: Annually</div>
+                  <div class="small" style="margin-top:12px;"><strong>References:</strong>
+                    <ol style="margin:8px 0 0 18px; padding:0;">
+                      <li>Miller JD, et al. How to do a 3-minute diabetic foot exam. <em>J Fam Pract.</em> 2014 Nov;63(11):646-56.</li>
+                      <li>Schaper NC, Van Netten JJ, Apelqvist J, et al; IWGDF Editorial Board. Practical guidelines on the prevention and management of diabetes-related foot disease (IWGDF 2023 update). <em>Diabetes Metab Res Rev.</em> 2024;40:e3657.</li>
+                      <li>American Diabetes Association. Standards of Care in Diabetes—2026. <em>Diabetes Care.</em> 2026 Jan 1;49(Supplement_1).</li>
+                      <li>Sloan G, et al. Pathogenesis, diagnosis and clinical management of diabetic sensorimotor peripheral neuropathy. <em>Nat Rev Endocrinol.</em> 2021 Jul;17(7):400-420.</li>
+                      <li>Lan NSR, et al. Unravelling the cardio-renal-metabolic-foot connection in people with diabetes-related foot ulceration: a narrative review. <em>Cardiovasc Diabetol.</em> 2024 Dec 18;23(1):437.</li>
+                      <li>Highton P, et al. The use of SGLT2 inhibitors in people with diabetes-related foot disease: A Delphi-based consensus study. <em>Diabetes Obes Metab.</em> 2025 Aug;27(8):4537-4546.</li>
+                      <li>Bonaca MP, et al. STRIDE Trial Investigators. Semaglutide and walking capacity in people with symptomatic peripheral artery disease and type 2 diabetes (STRIDE): a phase 3b, double-blind, randomized, placebo-controlled trial. <em>Lancet.</em> 2025 May 3;405(10489):1580-1593.</li>
+                      <li>Paton J, et al. Behavior change approaches for individuals with diabetes to improve foot self-management: a scoping review. <em>J Foot Ankle Res.</em> 2021 Jan 6;14(1):1.</li>
+                      <li>Ibrahim M, et al. Recommendations for management of diabetes and its complications during Hajj (Muslim Pilgrimage) - 2024 update. <em>Diabetes Res Clin Pract.</em> 2024 Jun;212:111647.</li>
+                    </ol>
+                  </div>
+                  
+                </div>
+              </div>
+              <div class="card">
+                <h3>Abbreviations</h3>
+                <div class="list-box small">
+                  <ul>
+                    <li><strong>DFU</strong>: Diabetes-related foot ulceration</li>
+                    <li><strong>LOPS</strong>: Loss of protective sensation</li>
+                    <li><strong>PAD</strong>: Peripheral artery disease</li>
+                    <li><strong>ESRD</strong>: End-stage renal disease</li>
+                    <li><strong>CAD</strong>: Coronary artery disease</li>
+                    <li><strong>CVD</strong>: Cerebrovascular disease</li>
+                    <li><strong>HF</strong>: Heart failure</li>
+                    <li><strong>CKD</strong>: Chronic kidney disease</li>
+                    <li><strong>SGLT2</strong>: Sodium-glucose cotransporter-2</li>
+                    <li><strong>GLP-1</strong>: Glucagon-like peptide-1</li>
+                    <li><strong>MRA</strong>: Mineralocorticoid receptor antagonist</li>
+                    <li><strong>IpTT</strong>: Ipswich Touch Test</li>
+                  </ul>
+                </div>
+              </div>
+</div>
+
+            </div>
+
+            <div class="report-column">
+              <div class="card report-card">
+                <h3 data-i18n="final_patient_report">Final Patient Report</h3>
+                <div class="report-intro" data-i18n="report_intro">A clean, continuously visible report panel helps the doctor review the final narrative while answering questions and documenting the visit.</div>
+                <div id="finalReport" class="report-box" data-i18n="complete_form_report">Complete the form to generate the report.</div>
+                <div class="education-game-card">
+                  <h4>Education Game</h4>
+                  <a href="https://pub-ac397c96ae2647d4a45221e91f4ce5dd.r2.dev/wja3qnv_Zc.html" target="_blank" rel="noopener">https://pub-ac397c96ae2647d4a45221e91f4ce5dd.r2.dev/wja3qnv_Zc.html</a>
+                  <img src="https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=https://pub-ac397c96ae2647d4a45221e91f4ce5dd.r2.dev/wja3qnv_Zc.html" alt="Education Game QR Code">
+                </div>
+              </div>
+
+              <div class="card no-print">
+                <div class="title-row">
+                  <div>
+                    <h3 data-i18n="assessment_history">Assessment history</h3>
+                    <div class="small" data-i18n="assessment_history_desc">Open earlier assessments for the current patient.</div>
+                  </div>
+                </div>
+                <div id="assessmentHistory" class="patient-list"></div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+        </div>
+      
+        
+      
+
+      <div id="directoryScreen" class="card directory-screen hidden">
+        <div class="title-row">
+          <div>
+            <div class="section-kicker">Patients directory</div>
+            <h2>Alphabetical patient list</h2>
+            <div class="small">Browse all saved patients by name, search quickly, review previous visits, and open the active patient record.</div>
+          </div>
+          <div class="data-tools-inline no-print">
+            <button class="secondary" data-i18n="new_patient" onclick="startNewPatient(); showAppView('workspace')">New patient</button>
+              <button class="secondary" data-i18n="restore_auto_backup" onclick="restoreAutoBackup()">Restore auto backup</button>
+              <button class="secondary" type="button" onclick="logout()" data-i18n="logout">Log out</button>
+          </div>
+        </div>
+
+        <div class="directory-toolbar">
+          <div class="field">
+            <label for="patientSearch">Search patients</label>
+            <input id="patientSearch" placeholder="Search by patient name, ID, physician, or clinic" oninput="renderPatientsList()">
+          </div>
+          <div class="field">
+            <label for="riskFilter">Filter by DFU risk</label>
+            <select id="riskFilter" onchange="renderPatientsList()">
+              <option value="">All risks</option>
+              <option value="URGENT">URGENT</option>
+              <option value="3">3</option>
+              <option value="2">2</option>
+              <option value="1">1</option>
+              <option value="0">0</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="archiveFilter">Records</label>
+            <select id="archiveFilter" onchange="renderPatientsList()">
+              <option value="active">Active only</option>
+              <option value="archived">Archived only</option>
+              <option value="all">All</option>
+            </select>
+          </div>
+          <div class="field">
+            <button class="secondary" type="button" onclick="clearDirectoryFilters()">Clear filters</button>
+          </div>
+        </div>
+
+        <div id="alphabetBar" class="alphabet-bar"></div>
+        <div id="directoryStats" class="directory-stats"></div>
+        <div id="directoryList" class="directory-grid"></div>
+      </div>
+    
+
+    <div id="patientPickerModal" class="modal-backdrop hidden">
+      <div class="modal-card">
+        <div class="title-row">
+          <div>
+            <div class="section-kicker">Select patient</div>
+            <h3 style="margin:0;">Start new assessment</h3>
+            <div class="small">Choose the patient for the new assessment. The latest demographic data will be loaded automatically.</div>
+          </div>
+          <button type="button" class="secondary" onclick="closePatientPicker()">Close</button>
+        </div>
+        <div class="field" style="margin-top:8px;">
+          <label for="patientPickerSearch">Search patient</label>
+          <input id="patientPickerSearch" placeholder="Search by name, ID, physician, or clinic" oninput="renderPatientPickerList()">
+        </div>
+        <div id="patientPickerList" class="patient-list" style="margin-top:14px; max-height:55vh;"></div>
+      </div>
+    </div>
+
+  
+
+
+
+<script>
+/* Safe storage for desktop + mobile + file:// */
+const storage = (() => {
+  try{
+    const testKey = '__dfu_storage_test__';
+    window.localStorage.setItem(testKey, '1');
+    window.localStorage.removeItem(testKey);
+    return window.localStorage;
+  }catch(error){
+    const memoryStore = {};
+    return {
+      getItem(key){
+        return Object.prototype.hasOwnProperty.call(memoryStore, key) ? memoryStore[key] : null;
+      },
+      setItem(key, value){
+        memoryStore[key] = String(value);
+      },
+      removeItem(key){
+        delete memoryStore[key];
+      },
+      clear(){
+        Object.keys(memoryStore).forEach(key => delete memoryStore[key]);
+      }
+    };
+  }
+})();
+</script>
+
+<script>
+/* Safe IndexedDB compatibility layer
+   Keeps the original synchronous localStorage workflow working,
+   while mirroring patient records into IndexedDB for larger datasets.
+*/
+const DFU_IDB_NAME = 'dfu_app_db_v4_20260419';
+const DFU_IDB_VERSION = 3;
+const DFU_PATIENT_STORE = 'patients';
+const DFU_ACCOUNT_STORE = 'account';
+const DFU_SESSION_STORE = 'session';
+
+function shouldUseIndexedDB(){
+  try{
+    return typeof indexedDB !== 'undefined' && window.location.protocol !== 'file:';
+  }catch(error){
+    return false;
+  }
+}
+
+function openDFUDatabase(){
+  return new Promise((resolve, reject) => {
+    if(!shouldUseIndexedDB()){
+      reject(new Error('IndexedDB disabled for this browser/context.'));
+      return;
+    }
+    const request = indexedDB.open(DFU_IDB_NAME, DFU_IDB_VERSION);
+    request.onupgradeneeded = function(event){
+      const db = event.target.result;
+      if(!db.objectStoreNames.contains(DFU_PATIENT_STORE)){
+        db.createObjectStore(DFU_PATIENT_STORE, { keyPath: 'id' });
+      }
+      if(!db.objectStoreNames.contains(DFU_ACCOUNT_STORE)){
+        db.createObjectStore(DFU_ACCOUNT_STORE, { keyPath: 'key' });
+      }
+      if(!db.objectStoreNames.contains(DFU_SESSION_STORE)){
+        db.createObjectStore(DFU_SESSION_STORE, { keyPath: 'key' });
+      }
+    };
+    request.onsuccess = function(event){ resolve(event.target.result); };
+    request.onerror = function(){ reject(request.error); };
+  });
+}
+
+async function idbSavePatientsMirror(patients){
+  try{
+    const db = await openDFUDatabase();
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction(DFU_PATIENT_STORE, 'readwrite');
+      const store = tx.objectStore(DFU_PATIENT_STORE);
+      store.clear();
+      (patients || []).forEach(patient => store.put(patient));
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+    db.close();
+  }catch(error){
+    console.warn('IndexedDB mirror save skipped:', error);
+  }
+}
+
+async function idbLoadPatientsMirror(){
+  try{
+    const db = await openDFUDatabase();
+    const result = await new Promise((resolve, reject) => {
+      const tx = db.transaction(DFU_PATIENT_STORE, 'readonly');
+      const store = tx.objectStore(DFU_PATIENT_STORE);
+      const req = store.getAll();
+      req.onsuccess = () => resolve(req.result || []);
+      req.onerror = () => reject(req.error);
+    });
+    db.close();
+    return result;
+  }catch(error){
+    console.warn('IndexedDB mirror load skipped:', error);
+    return [];
+  }
+}
+
+
+async function idbSaveAccountMirror(account){
+  try{
+    const db = await openDFUDatabase();
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction(DFU_ACCOUNT_STORE, 'readwrite');
+      const store = tx.objectStore(DFU_ACCOUNT_STORE);
+      if(account){
+        store.put({ key: 'primary', value: account });
+      }else{
+        store.delete('primary');
+      }
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+    db.close();
+  }catch(error){
+    console.warn('IndexedDB account save skipped:', error);
+  }
+}
+
+async function idbLoadAccountMirror(){
+  try{
+    const db = await openDFUDatabase();
+    const result = await new Promise((resolve, reject) => {
+      const tx = db.transaction(DFU_ACCOUNT_STORE, 'readonly');
+      const store = tx.objectStore(DFU_ACCOUNT_STORE);
+      const req = store.get('primary');
+      req.onsuccess = () => resolve(req.result ? req.result.value : null);
+      req.onerror = () => reject(req.error);
+    });
+    db.close();
+    return result;
+  }catch(error){
+    console.warn('IndexedDB account load skipped:', error);
+    return null;
+  }
+}
+
+async function idbSaveLoginMirror(isLoggedIn){
+  try{
+    const db = await openDFUDatabase();
+    await new Promise((resolve, reject) => {
+      const tx = db.transaction(DFU_SESSION_STORE, 'readwrite');
+      const store = tx.objectStore(DFU_SESSION_STORE);
+      if(isLoggedIn){
+        store.put({ key: 'login', value: '1' });
+      }else{
+        store.delete('login');
+      }
+      tx.oncomplete = () => resolve();
+      tx.onerror = () => reject(tx.error);
+    });
+    db.close();
+  }catch(error){
+    console.warn('IndexedDB login save skipped:', error);
+  }
+}
+
+async function idbLoadLoginMirror(){
+  try{
+    const db = await openDFUDatabase();
+    const result = await new Promise((resolve, reject) => {
+      const tx = db.transaction(DFU_SESSION_STORE, 'readonly');
+      const store = tx.objectStore(DFU_SESSION_STORE);
+      const req = store.get('login');
+      req.onsuccess = () => resolve(req.result ? req.result.value : '');
+      req.onerror = () => reject(req.error);
+    });
+    db.close();
+    return result || '';
+  }catch(error){
+    console.warn('IndexedDB login load skipped:', error);
+    return '';
+  }
+}
+
+async function restoreStateFromIndexedDBIfNeeded(){
+  if(!shouldUseIndexedDB()){
+    return;
+  }
+  try{
+    const localPatientsRaw = storage.getItem(STORAGE_KEYS.patients);
+    const localPatients = localPatientsRaw ? JSON.parse(localPatientsRaw) : [];
+    if(!Array.isArray(localPatients) || !localPatients.length){
+      const mirroredPatients = await idbLoadPatientsMirror();
+      if(Array.isArray(mirroredPatients) && mirroredPatients.length){
+        storage.setItem(STORAGE_KEYS.patients, JSON.stringify(mirroredPatients));
+        console.log('Patients restored from IndexedDB mirror.');
+      }
+    }
+
+    if(!storage.getItem(STORAGE_KEYS.account)){
+      const mirroredAccount = await idbLoadAccountMirror();
+      if(mirroredAccount){
+        storage.setItem(STORAGE_KEYS.account, JSON.stringify(mirroredAccount));
+        console.log('Account restored from IndexedDB mirror.');
+      }
+    }
+
+    if(!storage.getItem(STORAGE_KEYS.login)){
+      const mirroredLogin = await idbLoadLoginMirror();
+      if(mirroredLogin){
+        storage.setItem(STORAGE_KEYS.login, mirroredLogin);
+        console.log('Login state restored from IndexedDB mirror.');
+      }
+    }
+  }catch(error){
+    console.warn('Restore from IndexedDB mirror skipped:', error);
+  }
+}
+</script>
+
+<script>
+
+const REMOTE_SYNC = {
+  enabled: false,
+  endpoint: '',
+  apiKey: '',
+  deviceIdKey: 'dfu_device_id_v1',
+  syncIntervalMs: 15000
+};
+
+function getDeviceId(){
+  let id = storage.getItem(REMOTE_SYNC.deviceIdKey);
+  if(!id){
+    id = uid('device');
+    storage.setItem(REMOTE_SYNC.deviceIdKey, id);
+  }
+  return id;
+}
+
+async function pullRemoteState(){
+  if(!REMOTE_SYNC.enabled || !REMOTE_SYNC.endpoint) return false;
+  try{
+    const response = await fetch(REMOTE_SYNC.endpoint + '?scope=dfu_app_state', {
+      method: 'GET',
+      headers: {
+        'Accept': 'application/json',
+        ...(REMOTE_SYNC.apiKey ? {'Authorization': 'Bearer ' + REMOTE_SYNC.apiKey} : {})
+      },
+      cache: 'no-store'
+    });
+    if(!response.ok) return false;
+    const payload = await response.json();
+    if(!payload || !payload.state) return false;
+    const state = payload.state;
+    if(state.account !== undefined) storage.setItem(STORAGE_KEYS.account, JSON.stringify(state.account));
+    if(state.patients !== undefined) storage.setItem(STORAGE_KEYS.patients, JSON.stringify(state.patients));
+    if(state.login !== undefined){
+      setLoginState(!!state.login);
+    }
+    return true;
+  }catch(error){
+    console.warn('Remote pull skipped:', error);
+    return false;
+  }
+}
+
+async function pushRemoteState(){
+  if(!REMOTE_SYNC.enabled || !REMOTE_SYNC.endpoint) return false;
+  try{
+    const state = {
+      account: getAccount(),
+      patients: getPatients(),
+      login: storage.getItem(STORAGE_KEYS.login) === '1',
+      updatedAt: new Date().toISOString(),
+      sourceDevice: getDeviceId()
+    };
+    const response = await fetch(REMOTE_SYNC.endpoint, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        ...(REMOTE_SYNC.apiKey ? {'Authorization': 'Bearer ' + REMOTE_SYNC.apiKey} : {})
+      },
+      body: JSON.stringify({scope: 'dfu_app_state', state})
+    });
+    return response.ok;
+  }catch(error){
+    console.warn('Remote push skipped:', error);
+    return false;
+  }
+}
+
+let remoteSyncTimer = null;
+function startRemoteSync(){
+  if(!REMOTE_SYNC.enabled || !REMOTE_SYNC.endpoint || remoteSyncTimer) return;
+  remoteSyncTimer = setInterval(async () => {
+    await pullRemoteState();
+    renderPatientsList();
+    renderAssessmentHistory();
+    updateCurrentPatientHub();
+  }, REMOTE_SYNC.syncIntervalMs || 15000);
+}
+
+const STORAGE_KEYS = {
+  account: 'dfu_local_account_v4_20260419',
+  accounts: 'dfu_local_accounts_multi_v1_20260502',
+  activeUser: 'dfu_active_username_v1_20260502',
+  patients: 'dfu_app_patients_v4_20260419',
+  patientsByUser: 'dfu_app_patients_by_user_v1_20260502',
+  login: 'dfu_app_logged_in_v4_20260419',
+  autoBackup: 'dfu_app_auto_backup_v4_20260419',
+  autoBackupMeta: 'dfu_app_auto_backup_meta_v4_20260419'
+};
+
+const LEGACY_STORAGE_KEYS = {
+  account: 'dfu_local_account_v2',
+  patients: 'dfu_app_patients_v2',
+  login: 'dfu_app_logged_in_v2'
+};
+const AUTO_BACKUP_INTERVAL_MS = 10 * 60 * 1000;
+const SYNC_PULSE_INTERVAL_MS = 3000;
+const SYNC_KEYS = {
+  pulse: 'dfu_sync_pulse_v4_20260419'
+};
+let syncChannel = null;
+let lastSeenSyncPulse = '';
+let lastSeenPatientsRaw = '';
+let lastSeenAccountRaw = '';
+let lastSeenLoginRaw = '';
+
+const EDUCATION_LINKS = []; // kept empty intentionally per April 6 notes; no education links displayed in this version.
+
+const DIRECTORY_LETTERS = ['ALL','A','B','C','D','E','F','G','H','I','J','K','L','M','N','O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+let currentAppView = 'workspace';
+let currentDirectoryLetter = 'ALL';
+
+function migrateLegacyStorage(){
+  try{
+    if(!storage.getItem(STORAGE_KEYS.account) && storage.getItem(LEGACY_STORAGE_KEYS.account)){
+      storage.setItem(STORAGE_KEYS.account, storage.getItem(LEGACY_STORAGE_KEYS.account));
+    }
+    if(!storage.getItem(STORAGE_KEYS.patients) && storage.getItem(LEGACY_STORAGE_KEYS.patients)){
+      storage.setItem(STORAGE_KEYS.patients, storage.getItem(LEGACY_STORAGE_KEYS.patients));
+    }
+    if(!storage.getItem(STORAGE_KEYS.login) && storage.getItem(LEGACY_STORAGE_KEYS.login)){
+      storage.setItem(STORAGE_KEYS.login, storage.getItem(LEGACY_STORAGE_KEYS.login));
+    }
+  }catch(e){
+    console.warn('Legacy migration skipped', e);
+  }
+}
+
+function normalizeAccount(account){
+  if(!account) return null;
+  return {
+    username: String(account.username || '').trim(),
+    password: String(account.password || '').trim(),
+    recoveryCode: account.recoveryCode || '',
+    recoverySpecialty: account.recoverySpecialty || '',
+    recoveryWorkplace: account.recoveryWorkplace || '',
+    securityQuestion: account.securityQuestion || '',
+    securityAnswer: account.securityAnswer || '',
+    createdAt: account.createdAt || account.updatedAt || new Date().toISOString(),
+    updatedAt: account.updatedAt || ''
+  };
+}
+
+function normalizeUsername(value=''){
+  return String(value || '').trim().toLowerCase();
+}
+
+function authMatchesUsername(account, username){
+  if(!account) return false;
+  return normalizeUsername(account.username) === normalizeUsername(username);
+}
+
+function getAccounts(){
+  try{
+    const parsed = JSON.parse(storage.getItem(STORAGE_KEYS.accounts) || '{}');
+    if(parsed && typeof parsed === 'object' && !Array.isArray(parsed)) return parsed;
+  }catch(error){
+    console.warn('Accounts read skipped:', error);
+  }
+  return {};
+}
+
+function setAccounts(accounts){
+  storage.setItem(STORAGE_KEYS.accounts, JSON.stringify(accounts || {}));
+}
+
+function getActiveUsername(){
+  return normalizeUsername(storage.getItem(STORAGE_KEYS.activeUser) || '');
+}
+
+function setActiveUsername(username){
+  const normalized = normalizeUsername(username);
+  if(normalized){
+    storage.setItem(STORAGE_KEYS.activeUser, normalized);
+  }else{
+    storage.removeItem(STORAGE_KEYS.activeUser);
+  }
+}
+
+function getAccountForUsername(username){
+  const key = normalizeUsername(username);
+  if(!key) return null;
+  const accounts = getAccounts();
+  const account = normalizeAccount(accounts[key]);
+  return isUsableAccount(account) ? account : null;
+}
+
+function getPatientsByUser(){
+  try{
+    const parsed = JSON.parse(storage.getItem(STORAGE_KEYS.patientsByUser) || '{}');
+    if(parsed && typeof parsed === 'object' && !Array.isArray(parsed)) return parsed;
+  }catch(error){
+    console.warn('Patients-by-user read skipped:', error);
+  }
+  return {};
+}
+
+function setPatientsByUser(map){
+  storage.setItem(STORAGE_KEYS.patientsByUser, JSON.stringify(map || {}));
+}
+
+function getCurrentDataUsername(){
+  const active = getActiveUsername();
+  if(active) return active;
+  const keys = Object.keys(getAccounts());
+  return keys.length === 1 ? keys[0] : '';
+}
+
+function migrateSingleAccountToMulti(){
+  try{
+    const existingAccounts = getAccounts();
+    if(Object.keys(existingAccounts).length) return;
+    const singleAccount = normalizeAccount(JSON.parse(storage.getItem(STORAGE_KEYS.account) || 'null'));
+    if(!isUsableAccount(singleAccount)) return;
+    const usernameKey = normalizeUsername(singleAccount.username);
+    existingAccounts[usernameKey] = singleAccount;
+    setAccounts(existingAccounts);
+    setActiveUsername(usernameKey);
+    let oldPatients = [];
+    try{ oldPatients = JSON.parse(storage.getItem(STORAGE_KEYS.patients) || '[]'); }catch(error){ oldPatients = []; }
+    const byUser = getPatientsByUser();
+    if(Array.isArray(oldPatients) && !byUser[usernameKey]){
+      byUser[usernameKey] = oldPatients;
+      setPatientsByUser(byUser);
+    }
+  }catch(error){
+    console.warn('Single-account migration skipped:', error);
+  }
+}
+
+function createBackupPayload(){
+  return {
+    app: 'AssessDFUrisk&SaveTheLimbs',
+    version: 5,
+    multiAccount: true,
+    exportedAt: new Date().toISOString(),
+    activeUsername: getActiveUsername(),
+    accounts: getAccounts(),
+    patientsByUser: getPatientsByUser(),
+    account: getAccount(),
+    patients: getPatients()
+  };
+}
+
+function saveAutoBackup(reason='auto'){
+  try{
+    const payload = createBackupPayload();
+    storage.setItem(STORAGE_KEYS.autoBackup, JSON.stringify(payload));
+    storage.setItem(STORAGE_KEYS.autoBackupMeta, JSON.stringify({
+      savedAt: new Date().toISOString(),
+      reason
+    }));
+    updateCurrentPatientHub();
+  }catch(error){
+    console.error('Auto backup failed:', error);
+  }
+}
+
+function getAutoBackupMeta(){
+  try{
+    return JSON.parse(storage.getItem(STORAGE_KEYS.autoBackupMeta) || 'null');
+  }catch(error){
+    return null;
+  }
+}
+
+function restoreAutoBackup(){
+  const raw = storage.getItem(STORAGE_KEYS.autoBackup);
+  if(!raw){
+    setStatusMessage('No automatic backup is saved yet on this device.', 'var(--danger)');
+    return;
+  }
+  try{
+    const payload = JSON.parse(raw);
+    const hasMultiBackup = payload && payload.accounts && typeof payload.accounts === 'object' && payload.patientsByUser && typeof payload.patientsByUser === 'object';
+    if(!payload || (!hasMultiBackup && !Array.isArray(payload.patients))) throw new Error('Invalid auto backup format.');
+    const confirmed = window.confirm('Restore the latest automatic backup on this device? This will replace the current local accounts and patient records.');
+    if(!confirmed) return;
+
+    if(hasMultiBackup){
+      storage.setItem(STORAGE_KEYS.accounts, JSON.stringify(payload.accounts || {}));
+      storage.setItem(STORAGE_KEYS.patientsByUser, JSON.stringify(payload.patientsByUser || {}));
+      setActiveUsername('');
+      storage.removeItem(STORAGE_KEYS.account);
+      storage.removeItem(STORAGE_KEYS.patients);
+      idbSaveAccountMirror(null);
+      idbSavePatientsMirror([]);
+    }else{
+      if(payload.account){
+        const restoredAccount = normalizeAccount(payload.account);
+        if(restoredAccount && isUsableAccount(restoredAccount)){
+          const key = normalizeUsername(restoredAccount.username);
+          const accounts = getAccounts();
+          accounts[key] = restoredAccount;
+          setAccounts(accounts);
+          const byUser = getPatientsByUser();
+          byUser[key] = payload.patients || [];
+          setPatientsByUser(byUser);
+          setActiveUsername('');
+          storage.removeItem(STORAGE_KEYS.account);
+          storage.removeItem(STORAGE_KEYS.patients);
+        }
+      }
+    }
+
+    setLoginState(false);
+    setActiveUsername('');
+
+    currentPatientId = null;
+    currentAssessmentId = null;
+    creatingNewPatient = true;
+
+    try{
+      resetForm(false);
+    }catch(resetError){
+      console.warn('Reset after backup restore skipped:', resetError);
+    }
+
+    renderPatientsList();
+    renderAssessmentHistory();
+    updateCurrentPatientHub();
+
+    const appScreen = document.getElementById('appScreen');
+    const authScreen = document.getElementById('authScreen');
+    if(appScreen) appScreen.classList.add('hidden');
+    if(authScreen) authScreen.classList.remove('hidden');
+    showAuthMode('login');
+
+    notifyDataSync('restore-backup');
+    setStatusMessage('Automatic backup restored. Please log in with the account you want to use.', 'var(--success)');
+  }catch(error){
+    console.error('Automatic backup restore failed:', error);
+    setStatusMessage('Could not restore the automatic backup saved on this device.', 'var(--danger)');
+  }
+}
+
+function downloadFullBackup(){
+  try{
+    const payload = createBackupPayload();
+    payload.backupType = 'manual';
+    const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json;charset=utf-8' });
+    const a = document.createElement('a');
+    const date = new Date().toISOString().slice(0,10);
+    a.href = URL.createObjectURL(blob);
+    a.download = `AssessDFUrisk_backup_${date}.json`;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    URL.revokeObjectURL(a.href);
+    setStatusMessage('Backup downloaded successfully.', 'var(--success)');
+  }catch(error){
+    console.error('Backup download failed:', error);
+    setStatusMessage('Could not download backup.', 'var(--danger)');
+  }
+}
+
+function triggerBackupImport(){
+  const input = document.getElementById('backupImportFile');
+  if(input){
+    input.value = '';
+    input.click();
+  }else{
+    setStatusMessage('Backup import input was not found.', 'var(--danger)');
+  }
+}
+
+function importBackupFile(event){
+  const file = event && event.target && event.target.files ? event.target.files[0] : null;
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = function(){
+    try{
+      const payload = JSON.parse(String(reader.result || ''));
+      const hasMultiBackup = payload && payload.accounts && typeof payload.accounts === 'object' && payload.patientsByUser && typeof payload.patientsByUser === 'object';
+      if(!payload || (!hasMultiBackup && !Array.isArray(payload.patients))) throw new Error('Invalid backup file.');
+      const confirmed = window.confirm('Import this backup? This will replace the current local accounts and patient records on this device.');
+      if(!confirmed) return;
+
+      if(hasMultiBackup){
+        storage.setItem(STORAGE_KEYS.accounts, JSON.stringify(payload.accounts || {}));
+        storage.setItem(STORAGE_KEYS.patientsByUser, JSON.stringify(payload.patientsByUser || {}));
+        setActiveUsername('');
+        storage.removeItem(STORAGE_KEYS.account);
+        storage.removeItem(STORAGE_KEYS.patients);
+        idbSaveAccountMirror(null);
+        idbSavePatientsMirror([]);
+      }else if(payload.account){
+        const restoredAccount = normalizeAccount(payload.account);
+        if(restoredAccount && isUsableAccount(restoredAccount)){
+          const key = normalizeUsername(restoredAccount.username);
+          const accounts = getAccounts();
+          accounts[key] = restoredAccount;
+          setAccounts(accounts);
+          const byUser = getPatientsByUser();
+          byUser[key] = payload.patients || [];
+          setPatientsByUser(byUser);
+        }
+      }
+
+      setLoginState(false);
+      setActiveUsername('');
+      saveAutoBackup('manual-import');
+      notifyDataSync('manual-import');
+
+      currentPatientId = null;
+      currentAssessmentId = null;
+      creatingNewPatient = true;
+      try{ resetForm(false); }catch(error){ console.warn('Reset after import skipped:', error); }
+      renderPatientsList();
+      renderAssessmentHistory();
+      updateCurrentPatientHub();
+      showAuthScreen(hasAccount() ? 'login' : 'signup');
+      setStatusMessage('Backup imported. Please log in with the account you want to use.', 'var(--success)');
+    }catch(error){
+      console.error('Backup import failed:', error);
+      setStatusMessage('Could not import backup. Please choose a valid backup JSON file.', 'var(--danger)');
+    }
+  };
+  reader.readAsText(file);
+}
+
+function resetLocalAccountOnly(){
+  const confirmed = window.confirm('Reset the local account on this device? Patient records will be kept. Use this only if login/signup is stuck.');
+  if(!confirmed) return;
+  clearStoredAccount();
+  setLoginState(false);
+  saveAutoBackup('reset-local-account');
+  notifyDataSync('reset-local-account');
+  clearAuthInputs();
+  showAuthMode('signup');
+  setStatusMessage('Local account reset. You can create a new account now. Patient records were kept.', 'var(--success)');
+}
+
+function setStatusMessage(message, color='var(--success)'){
+  const authStatus = document.getElementById('authStatus');
+  const appStatus = document.getElementById('status');
+  if(authStatus){
+    authStatus.textContent = message;
+    authStatus.style.color = color;
+  }
+  if(appStatus){
+    appStatus.textContent = message;
+    appStatus.style.color = color;
+  }
+}
+
+
+function setLoginState(isLoggedIn){
+  if(isLoggedIn){
+    storage.setItem(STORAGE_KEYS.login, '1');
+  }else{
+    storage.removeItem(STORAGE_KEYS.login);
+  }
+  idbSaveLoginMirror(!!isLoggedIn);
+}
+
+function showAuthScreen(mode='login'){
+  const auth = document.getElementById('authScreen');
+  const app = document.getElementById('appScreen');
+  if(app) app.classList.add('hidden');
+  if(auth) auth.classList.remove('hidden');
+  showAuthMode(mode);
+}
+  function showAuthMode(mode='login'){
+    const panels = {
+        login: 'loginPanel',
+        signup: 'signupPanel',
+        firstTimeSetup: 'signupPanel',
+        change: 'changePasswordPanel',
+        changePassword: 'changePasswordPanel',
+        forgot: 'forgotPasswordPanel',
+        emergencyReset: 'emergencyResetPanel',
+        emergency: 'emergencyResetPanel'
+    };
+
+    Object.values(panels).forEach(function(id){
+        const panel = document.getElementById(id);
+        if(panel) panel.classList.add('hidden');
+    });
+
+    const panelId = panels[mode] || panels.login;
+    const panel = document.getElementById(panelId);
+
+    if(panel){
+        panel.classList.remove('hidden');
+        panel.scrollIntoView({behavior:'smooth', block:'start'});
+    }
+}
+function showAppView(view){
+  currentAppView = view;
+  const workspace = document.getElementById('workspaceScreen');
+  const directory = document.getElementById('directoryScreen');
+  const workspaceBtn = document.getElementById('workspaceTabBtn');
+  const directoryBtn = document.getElementById('directoryTabBtn');
+  if(workspace) workspace.classList.toggle('hidden', view !== 'workspace');
+  if(directory) directory.classList.toggle('hidden', view !== 'directory');
+  if(workspaceBtn) workspaceBtn.classList.toggle('active', view === 'workspace');
+  if(directoryBtn) directoryBtn.classList.toggle('active', view === 'directory');
+  renderPatientsList();
+}
+
+function clearDirectoryFilters(){
+  const search = document.getElementById('patientSearch');
+  const risk = document.getElementById('riskFilter');
+  const archive = document.getElementById('archiveFilter');
+  if(search) search.value = '';
+  if(risk) risk.value = '';
+  if(archive) archive.value = 'active';
+  currentDirectoryLetter = 'ALL';
+  renderPatientsList();
+}
+
+function buildAlphabetBar(){
+  const holder = document.getElementById('alphabetBar');
+  if(!holder) return;
+  holder.innerHTML = DIRECTORY_LETTERS.map(letter => `
+    <button class="alpha-btn ${letter === currentDirectoryLetter ? 'active-alpha' : ''}" type="button" onclick="setDirectoryLetter('${letter}')">${letter}</button>
+  `).join('');
+}
+
+function setDirectoryLetter(letter){
+  currentDirectoryLetter = letter;
+  renderPatientsList();
+}
+
+function getLatestAssessmentForPatient(patient){
+  return patient && patient.assessments && patient.assessments.length ? patient.assessments[0] : null;
+}
+
+function getFilteredSortedPatients(){
+  const search = (document.getElementById('patientSearch')?.value || '').toLowerCase().trim();
+  const riskFilter = document.getElementById('riskFilter')?.value || '';
+  const archiveFilter = document.getElementById('archiveFilter')?.value || 'active';
+  let patients = [...getPatients()];
+
+  if(archiveFilter === 'active') patients = patients.filter(p => !p.archived);
+  if(archiveFilter === 'archived') patients = patients.filter(p => p.archived);
+  if(riskFilter) patients = patients.filter(p => (p.latestRisk || '') === riskFilter);
+
+  if(search){
+    patients = patients.filter(p =>
+      (p.patientName || '').toLowerCase().includes(search) ||
+      (p.patientId || '').toLowerCase().includes(search) ||
+      (p.physician || '').toLowerCase().includes(search) ||
+      (p.clinic || '').toLowerCase().includes(search)
+    );
+  }
+
+  if(currentDirectoryLetter !== 'ALL'){
+    patients = patients.filter(p => ((p.patientName || '').trim().charAt(0).toUpperCase() || '#') === currentDirectoryLetter);
+  }
+
+  patients.sort((a,b) => (a.patientName || '').localeCompare((b.patientName || ''), undefined, { sensitivity: 'base' }));
+  return patients;
+}
+
+
+function renderAutoBackupBadge(){
+  const meta = getAutoBackupMeta();
+  if(!meta || !meta.savedAt) return '<div class="backup-badge">Auto backup not saved yet</div>';
+  const when = new Date(meta.savedAt);
+  const label = Number.isNaN(when.getTime()) ? meta.savedAt : when.toLocaleString();
+  return `<div class="backup-badge">Automatic backup saved: ${escapeHtml(label)}</div>`;
+}
+
+function updateCurrentPatientHub(){
+  const holder = document.getElementById('currentPatientHub');
+  if(!holder) return;
+  const patient = getCurrentPatientObject();
+  if(!patient){
+    holder.innerHTML = `
+      <div class="hub-empty">
+        <h3 style="margin:0 0 6px;">${escapeHtml(t('no_active_patient_selected'))}</h3>
+        <div class="small">${escapeHtml(t('start_or_open_patient'))}</div>
+        ${renderAutoBackupBadge()}
+      </div>`;
+    return;
+  }
+  const latest = getLatestAssessmentForPatient(patient);
+  holder.innerHTML = `
+    <div class="hub-patient">
+      <div class="directory-head">
+        <div>
+          <h3>${escapeHtml(patient.patientName || 'Unnamed patient')}</h3>
+          <div class="directory-sub">ID: ${escapeHtml(patient.patientId || '—')} • Physician: ${escapeHtml(patient.physician || '—')}</div>
+        </div>
+        <div class="directory-badges">
+          <span class="pill">Risk ${escapeHtml(patient.latestRisk || '—')}</span>
+          ${patient.archived ? '<span class="pill archived">Archived</span>' : ''}
+        </div>
+      </div>
+      ${renderAutoBackupBadge()}
+      <div class="hub-meta">
+        <div class="mini"><strong>${escapeHtml(t('previous_visits'))}</strong>${patient.assessments?.length || 0}</div>
+        <div class="mini"><strong>${escapeHtml(t('latest_visit'))}</strong>${escapeHtml(latest?.assessmentDate || '—')}</div>
+        <div class="mini"><strong>${escapeHtml(t('previous_status'))}</strong>${escapeHtml(latest?.riskScore || patient.latestRisk || '—')}</div>
+        <div class="mini"><strong>${escapeHtml((REPORT_HEADINGS[currentLanguage] || REPORT_HEADINGS.en).clinic)}</strong>${escapeHtml(patient.clinic || '—')}</div>
+      </div>
+    </div>`;
+}
+
+function renderPatientDirectory(){
+  buildAlphabetBar();
+  const stats = document.getElementById('directoryStats');
+  const holder = document.getElementById('directoryList');
+  if(!holder || !stats) return;
+
+  const patients = getFilteredSortedPatients();
+  const allPatients = getPatients();
+  const activeCount = allPatients.filter(p => !p.archived).length;
+  const archivedCount = allPatients.filter(p => p.archived).length;
+  stats.innerHTML = `
+    <div class="directory-stat">Showing ${patients.length} patient(s)</div>
+    <div class="directory-stat">Active ${activeCount}</div>
+    <div class="directory-stat">Archived ${archivedCount}</div>
+    <div class="directory-stat">Letter ${currentDirectoryLetter}</div>`;
+
+  if(!patients.length){
+    holder.innerHTML = '<div class="small">No matching patients for the selected filters.</div>';
+    return;
+  }
+
+  holder.innerHTML = patients.map(p => {
+    const latest = getLatestAssessmentForPatient(p);
+    const historyPreview = (p.assessments || []).slice(0,3).map(a => `
+      <div class="history-row">
+        <span>${escapeHtml(a.patientSnapshot?.visitLabel || 'Assessment')}</span>
+        <span>${escapeHtml(a.assessmentDate || '—')} • Risk ${escapeHtml(a.riskScore || '—')}</span>
+      </div>
+    `).join('') || `<div class="small">${escapeHtml(t('no_saved_visits_yet'))}</div>`;
+    return `
+      <div class="directory-card ${p.id === currentPatientId ? 'active' : ''}">
+        <div class="directory-head">
+          <div>
+            <h4>${escapeHtml(p.patientName || 'Unnamed patient')}</h4>
+            <div class="directory-sub">ID: ${escapeHtml(p.patientId || '—')} • ${escapeHtml(p.physician || '—')}</div>
+          </div>
+          <div class="directory-badges">
+            <span class="pill">Risk ${escapeHtml(p.latestRisk || '—')}</span>
+            ${p.archived ? '<span class="pill archived">Archived</span>' : ''}
+          </div>
+        </div>
+        <div class="hub-meta" style="margin-top:12px;">
+          <div class="mini"><strong>Visits</strong>${p.assessments?.length || 0}</div>
+          <div class="mini"><strong>Latest visit</strong>${escapeHtml(latest?.assessmentDate || '—')}</div>
+          <div class="mini"><strong>Previous status</strong>${escapeHtml(latest?.riskScore || p.latestRisk || '—')}</div>
+          <div class="mini"><strong>Clinic</strong>${escapeHtml(p.clinic || '—')}</div>
+        </div>
+        <div class="directory-history">
+          <div class="small"><strong>${escapeHtml(t('previous_visits'))}</strong></div>
+          <div class="history-mini">${historyPreview}</div>
+        </div>
+        <div class="toolbar" style="margin-top:12px;">
+          <button onclick="openPatient('${p.id}')">Open</button>
+          <button class="danger-lite" onclick="deletePatient('${p.id}')">Delete</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+const keyQuestions = new Set([1,7,11,14,15,16,21,22,23,24,26]);
+
+const questionDomains = [
+  {
+    key: 'historySymptoms',
+    kicker: 'First Domain',
+    title: 'What to ask? History and symptoms',
+    description: 'Questions 1–15 focus on history, vascular symptoms, sensory symptoms, and prior diabetes-related foot risk indicators.',
+    sections: [{
+      title: null,
+      questions: [
+        { id: 1, text: 'Previous leg/foot ulcer, wound, or non-traumatic lower limb amputation/surgery?' },
+        { id: 2, text: 'Prior angioplasty, stent, or leg bypass surgery?' },
+        { id: 3, text: 'Long duration of diabetes: >10 years?' },
+        { id: 4, text: 'Uncontrolled diabetes: the level of HbA1c > 7% most of the time?' },
+        { id: 5, text: 'Diabetes-related retinopathy?' },
+        { id: 6, text: 'Diabetes-related chronic kidney disease?' },
+        { id: 7, text: 'End-stage renal disease (ESRD)?' },
+        { id: 8, text: 'Coronary artery disease, cerebrovascular disease, heart failure?' },
+        { id: 9, text: 'Hypertension?' },
+        { id: 10, text: 'Dyslipidemia?' },
+        { id: 11, text: 'New neuropathic pain or pain at rest?' },
+        { id: 12, text: 'Burning or tingling in legs or feet?' },
+        { id: 13, text: 'Loss of lower extremity sensation?' },
+        { id: 14, text: 'Claudication, leg or foot pain with activity?' },
+        { id: 15, text: 'Changes in foot skin colour, or skin lesions?' }
+      ]
+    }]
+  },
+  {
+    key: 'lookFor',
+    kicker: 'Second Domain',
+    title: 'What to look for? Feet examination',
+    description: 'Physical examination with dermatologic, neurologic, musculoskeletal, vascular, and footwear assessment.',
+    sections: [
+      {
+        title: 'Dermatologic exam',
+        questions: [
+          { id: 16, text: 'Does the patient have open wounds or fissures with or without infection?' },
+          { id: 17, text: 'Does the patient have discolored, ingrown, or elongated nails?' },
+          { id: 18, text: 'Are there signs of fungal infection?' },
+          { id: 19, text: 'Does the patient have discolored and/or hypertrophic skin lesions, calluses, or corns?' },
+          { id: 20, text: 'Does the patient have interdigital maceration?' }
+        ]
+      },
+      {
+        title: 'Neurologic exam',
+        questions: [
+          { id: 21, text: 'Is the patient non-responsive to the Ipswich Touch Test? Yes: (4/6, 3/6, 2/6, 1/6, 0/6). No: (6/6, 5/6).' }
+        ]
+      },
+      {
+        title: 'Musculoskeletal exam',
+        questions: [
+          { id: 22, text: 'Is the midfoot hot, red, or inflamed?' },
+          { id: 23, text: 'Does the patient have obvious deformities? If yes, for how long? Bunion, Hammertoe, chronic Charcot?' },
+          { id: 24, text: 'Does the patient have limitation of motion range of the joints?' }
+        ]
+      },
+      {
+        title: 'Vascular exam',
+        questions: [
+          { id: 25, text: 'Is the hair growth on the foot dorsum or lower limb decreased?' },
+          { id: 26, text: 'Are the dorsalis pedis and posterior tibial pulses not palpable, with or without gangrene/ischemia?' },
+          { id: 27, text: 'Is there a temperature difference between the calves and feet, or between the left and right foot,ischemia,gangrene?' }
+        ]
+      },
+      {
+        title: 'Footwear',
+        questions: [
+          { id: 28, text: 'Inappropriate footwear?' }
+        ]
+      }
+    ]
+  },
+  {
+    key: 'combDomain',
+    kicker: 'Third Domain',
+    title: 'Explore determinants of risky foot-health behavior',
+    description: 'Questions 29–60 profile modifiable COM-B behavior deficits and social-context risks relevant to foot care.',
+    sections: [
+      { title: 'Physical capacity', questions: [{ id: 29, text: 'Unable to inspect feet independently due to poor vision, obesity, arthritis, deformity, frailty, or dementia?' }] },
+      { title: 'Psychological capacity', questions: [
+        { id: 30, text: 'Nonadherence to the treatment plans: missed appointments, skipping medications, delay in seeking care?' },
+        { id: 31, text: 'Nonadherence to daily inspection of the feet including the sole and between the toes?' },
+        { id: 32, text: 'Unaware of warning signs: redness, ulcer, or discharge?' },
+        { id: 33, text: 'Unaware of when to seek urgent care?' },
+        { id: 34, text: 'Unaware that neuropathy may be painless?' },
+        { id: 35, text: 'Unaware of the importance of annual feet examination by a professional even in the absence of problems?' },
+        { id: 36, text: 'Unaware when to decrease activity levels?' },
+        { id: 37, text: 'Nonadherence to keeping feet dry: changing socks, shoes, and drying between toes after daily washing?' },
+        { id: 38, text: 'Nonadherence to applying moisturizing cream while avoiding areas between toes?' },
+        { id: 39, text: 'Walks barefoot at home?' },
+        { id: 40, text: 'Walks barefoot outside?' },
+        { id: 41, text: 'Wears shoes without socks?' },
+        { id: 42, text: 'Nonadherence to inspecting shoes for cracks or foreign body before wearing them?' },
+        { id: 43, text: 'Nonadherence to cutting or filing toenails regularly?' },
+        { id: 44, text: 'Use of abrasives to treat corn?' }
+      ]},
+      { title: 'Physical opportunity', questions: [
+        { id: 45, text: 'Poor access to healthcare: living in rural areas, refugee camps, or war settings?' },
+        { id: 46, text: 'Financial constraints: poverty or absence of health insurance?' }
+      ]},
+      { title: 'Social opportunity', questions: [
+        { id: 47, text: 'Depression, social isolation, or lives alone?' },
+        { id: 48, text: 'Wear shibshib/sandals (open-toe shoes)?' },
+        { id: 49, text: 'Practice feet soaking?' },
+        { id: 50, text: 'Use of hot water bladder to warm feet during winter, or placing feet near the heater?' },
+        { id: 51, text: 'Use of traditional remedies such as cupping with bloodletting (Hijjamah) for foot lesions, or moxibustion therapy?' },
+        { id: 52, text: 'Nonadherence to consulting own physician before leaving for Hajj?' },
+        { id: 53, text: 'Nonadherence to drying between toes after Wadoo?' },
+        { id: 54, text: 'Embarrassed to expose feet?' }
+      ]},
+      { title: 'Reflective motivation', questions: [
+        { id: 55, text: 'Nonadherence to exercise if able to?' },
+        { id: 56, text: 'Foot ulcers cannot be prevented?' }
+      ]},
+      { title: 'Automatic motivation', questions: [
+        { id: 57, text: 'Smoking habit or use nicotine?' },
+        { id: 58, text: 'Foot examination is not a priority; foot ulcers are not serious?' },
+        { id: 59, text: 'No pain, feet are fine?' },
+        { id: 60, text: 'Avoid checking due to fear of finding complications?' }
+      ]}
+    ]
+  }
+];
+
+const allQuestions = questionDomains.flatMap(domain => domain.sections.flatMap(section => section.questions));
+const questionTextMap = Object.fromEntries(allQuestions.map(q => [q.id, q.text]));
+
+const metabolicMap = {
+  3: 'Long duration of diabetes.',
+  4: 'Uncontrolled diabetes.',
+  5: 'Diabetes-related retinopathy.',
+  6: 'Diabetes-related chronic kidney disease.',
+  7: 'End-stage renal disease (ESRD).',
+  8: 'Coronary artery disease (CAD), cerebrovascular disease (CVD), heart failure (HF).',
+  9: 'Hypertension.',
+  10: 'Dyslipidemia.',
+  55: 'Lack of physical activity.',
+  57: 'Smoking.'
+};
+
+
+const actionPlans = {
+  '0': {
+    shortTitle: 'Very low Risk of DFU Score — Category: 0',
+    riskStrip: 'Category: 0. No LOPS & No PAD',
+    summary: 'Full detailed plan is shown below for Category 0.',
+    full: `Prevent the development or progression of subclinical diabetes-related peripheral neuropathy/PAD:
+Intervene to address identified Metabolic-Cardio-Renal Risk factors:
+Optimize glycemic control to achieve individualized targets in T1DM & T2DM: follow updated international guidelines recommendations on medical treatment of T2DM patients including novel agents with proven cardiovascular and renal benefits such as GLP-1 agonists and continue SGLT2 Inhibitors unless adverse effects occur; switch from canagliflozin if necessary.
+Stabilize and control coexisting comorbidities: coronary artery disease (CAD), cerebrovascular disease (CVD), heart failure (HF), chronic kidney disease (CKD), and diabetes-related retinopathy. Follow International guidelines directed medical therapy for established CAD, CVD, CKD, HF. Prescribe SGLT2 inhibitors, GLP-1 agonists, non-steroidal MRA agents for patients with Type 2 diabetes and /or HF, CKD regardless of glycemia unless contraindicated to maximize cardiorenal benefits.
+Aggressive pharmacological treatment of CVD risk factors (Hypertension and dyslipidemia)
+Lifestyle modification: weight reduction, exercise as able, smoking cessation.
+Intervene to prevent foot ulcer development: Even in the absence of clinical signs of LOPS or PAD, any pre-ulcerative finding such as callus, deformity, ingrown nail, fungal infection, blisters, hemorrhage should be referred for appropriate intervention.
+Intervene to address identified risky foot health behavior: Physical capacity deficit: physical skill development and training, involve Caregivers, enabling interventions (medication, surgery, prostheses). Psychological capacity deficit: provide education, training - demonstration, enablement. Physical opportunity deficit: provide enablement: training, environmental restructuring, social support advice, footwear advice, appointment scheduled. Social opportunity deficit: family involvement, provide enablement, training cultural and religious sensitive counseling on foot care. Reflective motivation deficit: provide education, persuasion and understanding eliciting positive (or negative) feelings about behavioral target training, motivational interviewing, SMART (specific, measurable, achievable, relevant & time-bound) goals set. Automatic motivation deficit: provide environmental restructuring, enablement: habit paring strategies (linking to shower, prayer, etc.), emotional reframing, reminder system, smoking cessation support.
+Intervene to Empower patient on:
+1) Routine self-management: Visually examine both feet, including the sole and between the toes. Change shoes and socks regularly, dry feet after baths or exercise. When applying moisturizing cream avoid areas between toes. If the patient can't do this, educate a family member on foot-care principles, how to perform IpTT to detect LOPS, When/how to seek medical attention and keeping necessary telephone numbers handy.
+2) Trauma avoidance: Avoidance of barefoot walking inside and outside. Recommend appropriate footwear, and advise against shoes that are too small, tight, or rub against a particular area of the foot. Suggest yearly replacement of shoes-more frequently if they exhibit high wear. Avoidance of traditional remedies use, wearing open toe shoes, emphasizing the need to dry between toes after Wadoo. Encourage patients to attend the clinic 1 month prior to the Haj for: reevaluation of the at-risk feet category, reinforcement of education on diabetes care, foot care & avoidance of barefoot walking during the pilgrimage and use of appropriate shoes.
+3) Warning signs and acting: Report any new symptoms, lesions, discolorations, or swelling to a health care professional.`,
+    followUp: 'Follow up: Annually'
+  },
+  '1': {
+    shortTitle: 'Low Risk of DFU Score — Category: 1',
+    riskStrip: 'Category: 1. LOPS or PAD',
+    summary: 'Full detailed plan is shown below for Category 1.',
+    full: `Stop progression of diabetes related peripheral neuropathy & PAD:
+Intervene to address identified Metabolic-Cardio-Renal Risk factors:
+Optimize glycemic control to achieve individualized targets in T1DM & T2DM: follow updated international guidelines recommendations on medical treatment of T2DM patients including novel agents with proven cardiovascular and renal benefits: GLP-1 agonists, continue SGLT2 Inhibitors unless adverse effects occur; switch from canagliflozin if necessary.
+Stabilize and control coexisting comorbidities: coronary artery disease (CAD), cerebrovascular disease (CVD), heart failure (HF), chronic kidney disease (CKD), and diabetes-related retinopathy. Follow International guidelines directed medical therapy for established CAD, CVD, CKD, HF. Prescribe SGLT2 inhibitors, GLP-1 agonists, non-steroidal MRA agents for patients with Type 2 diabetes and /or HF, CKD regardless of glycemia unless contraindicated to maximize cardiorenal benefits.
+Aggressive pharmacological treatment of CVD risk factors (Hypertension and dyslipidemia)
+Lifestyle modification: weight reduction, exercise as able, smoking cessation
+Intervene to prevent foot ulcer development: Even in the absence of clinical signs of LOPS or PAD, any pre-ulcerative finding such as callus, deformity, ingrown nail, fungal infection, blisters, hemorrhage should be referred for appropriate intervention. Regular foot assessment by the diabetic foot team or a trained Physician: Professional foot and nail care, including treatment of onychomycosis and Tinea pedis if present. Well-fitting, sensible footwear with custom, full-contact foot orthoses and diabetic socks. Consider vascular surgery for peripheral arterial disease, pain management for ischemic pain, if present. Referral to rehab specialist to provide fitness plan.
+Intervene to address identified risky foot health behavior: Physical capacity deficit: physical skill development and training, involve Caregivers, enabling interventions (medication, surgery, prostheses). Psychological capacity deficit: provide education, training - demonstration, enablement. Physical opportunity deficit: provide enablement: training, environmental restructuring, social support advice, footwear advice, appointment scheduled. Social opportunity deficit: family involvement, provide enablement, training cultural and religious sensitive counseling on foot care. Reflective motivation deficit: provide education, persuasion and understanding eliciting positive (or negative) feelings about behavioral target training, motivational interviewing, SMART (specific, measurable, achievable, relevant & time-bound) goals set. Automatic motivation deficit: provide environmental restructuring, enablement: habit paring strategies (linking to shower, prayer, etc.), emotional reframing, reminder system, smoking cessation.
+Intervene to Empower patient on:
+1) Routine self-management: Visually examine both feet, including the sole and between the toes. Change shoes and socks regularly, dry feet after baths or exercise. When applying moisturizing cream avoid areas between toes. If the patient can't do this, educate a family member on foot-care principles, how to perform IpTT to detect LOPS, When/how to seek medical attention and keeping necessary telephone numbers handy.
+2) Trauma avoidance: Avoidance of barefoot walking inside and outside. Recommend appropriate footwear, and advise against shoes that are too small, tight, or rub against a particular area of the foot. Suggest yearly replacement of shoes-more frequently if they exhibit high wear. Avoidance of traditional remedies use, wearing open toe shoes, emphasizing the need to dry between toes after Wadoo. Encourage patients to attend the clinic 1 month prior to the Haj for: reevaluation of the at-risk feet category, reinforcement of education on diabetes care, foot care & avoidance of barefoot walking during the pilgrimage and use of appropriate shoes.
+3) Warning signs and acting: Report any new symptoms, lesions, discolorations, or swelling to a health care professional.`,
+    followUp: 'Follow up: Screen every 6-12 months'
+  },
+  '2': {
+    shortTitle: 'Moderate Risk of DFU Score — Category: 2',
+    riskStrip: 'Category: 2. LOPS + PAD OR LOPS + foot deformity OR PAD + foot deformity',
+    summary: 'Full detailed plan is shown below for Category 2.',
+    full: `Stop progression of diabetes related peripheral neuropathy & PAD:
+Intervene to address identified Metabolic-Cardio-Renal Risk factors:
+Optimize glycemic control to achieve individualized targets in T1DM & T2DM: follow updated international guidelines recommendations on medical treatment of T2DM patients including novel agents for with proven cardiovascular and renal benefits GLP-1 agonists, continue SGLT2 Inhibitors unless adverse effects occur; switch from canagliflozin if necessary.
+Stabilize and control coexisting comorbidities: coronary artery disease (CAD), cerebrovascular disease (CVD), heart failure (HF), chronic kidney disease (CKD), and diabetes-related retinopathy. Follow International guidelines directed medical therapy for established CAD, CVD, CKD, HF. Prescribe SGLT2 inhibitors, GLP-1 agonists, non-steroidal MRA agents for patients with Type 2 diabetes and /or HF, CKD regardless of glycemia unless contraindicated to maximize cardiorenal benefits. Aggressive pharmacological treatment of CVD risk factors (Hypertension and dyslipidemia). Lifestyle modification: weight reduction, exercise as able, smoking cessation.
+Intervene to prevent foot ulcer development: Any pre-ulcerative finding: callus, deformity, ingrown nail, fungal infection, blisters should be referred for appropriate intervention. Regular foot assessment by the diabetic foot team or a trained Physician. Professional foot and nail care, including treatment of onychomycosis and Tinea pedis if present. Well-fitting, orthopedic footwear with custom full-contact total contact cast foot orthoses and diabetic socks. Footwear must accommodate any deformities present. Consider orthopedic surgery for deformity. Consider vascular surgery for peripheral arterial disease, pain management for ischemic pain, if present. When/how to seek medical attention if needed. Consider remote foot temperature monitoring for high-risk patients. Referral to rehab specialist to provide fitness plan.
+Intervene to address identified risky foot health behavior: Physical capacity deficit: physical skill development and training, involve Caregivers, enabling interventions (medication, surgery, prostheses). Psychological capacity deficit: provide education, training - demonstration, enablement. Physical opportunity deficit: provide enablement: training, environmental restructuring, social support advice, footwear advice, appointment scheduled. Social opportunity deficit: family involvement, provide enablement, training cultural and religious sensitive counseling on foot care. Reflective motivation deficit: provide education, persuasion and understanding eliciting positive (or negative) feelings about behavioral target training, motivational interviewing, SMART (specific, measurable, achievable, relevant & time-bound) goals set. Automatic motivation deficit: provide environmental restructuring, enablement: habit paring strategies (linking to shower, prayer, etc.), emotional reframing, reminder system, smoking cessation support.
+Intervene to Empower patient on:
+1) Routine self-management: Visually examine both feet, including the sole and between the toes. Change shoes and socks regularly, dry feet after baths or exercise. When applying moisturizing cream avoid areas between toes. If the patient can't do this, educate a family member on foot-care principles, how to perform IpTT to detect LOPS, When/how to seek medical attention and keeping necessary telephone numbers handy.
+2) Trauma avoidance: Avoidance of barefoot walking inside and outside. Recommend appropriate footwear, and advise against shoes that are too small, tight, or rub against a particular area of the foot. Suggest yearly replacement of shoes-more frequently if they exhibit high wear. Avoidance of traditional remedies use, wearing open toe shoes, emphasizing the need to dry between toes after Wadoo. Encourage patients to attend the clinic 1 month prior to the Haj for: reevaluation of the at-risk feet category, reinforcement of education on diabetes care, foot care & avoidance of barefoot walking during the pilgrimage and use of appropriate shoes.
+3) Warning signs and acting: Report any new symptoms, lesions, discolorations, or swelling to a health care professional.`,
+    followUp: 'Follow up: Screen every 3-6 months'
+  },
+  '3': {
+    shortTitle: 'High Risk Score — Category: 3',
+    riskStrip: 'Category: 3. LOPS or PAD plus one or more of: history of a foot ulcer, lower extremity amputation, or End-stage renal disease',
+    summary: 'Full detailed plan is shown below for Category 3.',
+    full: `Reduce progression of DPN / PAD:
+Intervene to address identified Metabolic-Cardio-Renal Risk factors:
+Optimize glycemic control to achieve individualized targets in T1DM & T2DM: follow recent international guidelines. Use SGLT2 inhibitors cautiously in patients with of T2DM and a history of ulceration or amputation. Account for patient preferences and ability to manage risks when prescribing SGLT2 inhibitors to this group
+Stabilize and control coexisting comorbidities: coronary artery disease (CAD), cerebrovascular disease (CVD), heart failure (HF), chronic kidney disease (CKD), and diabetes-related retinopathy. Follow International guidelines directed medical therapy. For established CAD, CVD, CKD, HF. Avoid canagliflozin in those with high risk of amputation; consider other SGLT2 inhibitors for potential cardio-renal protection.
+Aggressive pharmacological treatment of CVD risk factors (Hypertension and dyslipidemia)
+Lifestyle modification: weight reduction, exercise as able, smoking cessation.
+Prevention of recurrence of diabetes related to foot complication: Regular foot assessment by the diabetic foot team or a trained Physician
+Professional foot and nail care, including treatment of onychomycosis and Tinea pedis if present. Well-fitting, orthopedic footwear with custom full-contact total contact cast foot orthoses and diabetic socks. Footwear must accommodate any deformities present. Modified footwear and/or prosthesis based on level of amputation. Consider orthopedic surgery for deformity. Consider vascular surgery for peripheral arterial disease, pain management for ischemic pain, if present. When/how to seek medical attention if needed. Consider remote foot temperature monitoring for high-risk patients. Referral to rehab specialist to provide fitness plan.
+Intervene to address identified risky foot health behavior: Physical capacity deficit: physical skill development and training, involve Caregivers, enabling interventions (medication, surgery, prostheses). Psychological capacity deficit: provide education, training - demonstration, enablement. Physical opportunity deficit: provide enablement: training, environmental restructuring, social support advice, footwear advice, appointment scheduled. Social opportunity deficit: family involvement, provide enablement, training cultural and religious sensitive counseling on foot care. Reflective motivation deficit: provide education, persuasion, and understanding eliciting positive (or negative) feelings about behavioral target training, motivational interviewing SMART (specific, measurable, achievable, relevant & time-bound) goals set. Automatic motivation deficit: provide environmental restructuring, enablement: habit paring strategies (linking to shower, prayer, etc.), emotional reframing, reminder system, smoking cessation support.
+Intervene to Empower patient on:
+1) Routine self-management: Visually examine both feet, including the sole and between the toes. Change shoes and socks regularly, dry feet after baths or exercise. When applying moisturizing cream avoid areas between toes. If the patient can't do this, educate a family member on foot-care principles, how to perform IpTT to detect LOPS, When/how to seek medical attention and keeping necessary telephone numbers handy.
+2) Trauma avoidance: Avoidance of barefoot walking inside and outside. Recommend appropriate footwear, and advise against shoes that are too small, tight, or rub against a particular area of the foot. Suggest yearly replacement of shoes-more frequently if they exhibit high wear. Avoidance of traditional remedies use, wearing open toe shoes, emphasizing the need to dry between toes after Wadoo. Encourage patients to attend the clinic 1 month prior to the Haj for: reevaluation of the at-risk feet category, reinforcement of education on diabetes care, foot care & avoidance of barefoot walking during the pilgrimage and use of appropriate shoes.
+3) Warning signs and acting: Report any new symptoms, lesions, discolorations, or swelling to a health care professional`,
+    followUp: 'Follow up: Screen every 1-3 months'
+  },
+  'URGENT': {
+    shortTitle: 'URGENT RISK — Active pathology',
+    riskStrip: 'URGENT RISK — Open wound / Active ulcer with or without infection / Active Charcot / New neuropathic pain or pain at rest / sudden absence of DP/PT pulses or gangrene',
+    summary: 'Full detailed plan is shown below for urgent risk.',
+    full: `Treatment of diabetic foot complication:
+Early referral to a multidisciplinary team:
+Foot team management:
+Regular wound management.
+Offloading with total contact cast, removable cast walker or wound shoe to close ulcers and/or to immobilize Charcot foot.
+Vascular intervention.
+Antibiotics and microbiology referral if necessary.
+Consider orthopedic intervention
+Intervene to address identified Metabolic-Cardio-Renal Risk factors: Optimize glycemic control to achieve individualized targets in T1DM & T2DM. Avoid starting SGLT2 inhibitors in active ulcers. Stabilize and control coexisting comorbidities: coronary artery disease (CAD), cerebrovascular disease (CVD), heart failure (HF), chronic kidney disease (CKD), and diabetes-related retinopathy. Follow International guidelines directed medical therapy for established CAD, CVD, CKD, HF. Aggressive pharmacological treatment of CVD risk factors (Hypertension and dyslipidemia). Lifestyle modification: weight reduction, exercise as able, smoking cessation.
+Intervene to address identified risky foot health behavior: Physical capacity deficit: physical skill development and training, involve Caregivers, enabling interventions (medication, surgery, prostheses). Psychological capacity deficit: provide education, training - demonstration, enablement. Physical opportunity deficit: provide enablement: training, environmental restructuring, social support advice, footwear advice, appointment scheduled. Social opportunity deficit: family involvement, provide enablement, training cultural and religious sensitive counseling on foot care. Reflective motivation deficit: provide education, persuasion, and understanding eliciting positive (or negative) feelings about behavioral target training, motivational interviewing, SMART (specific, measurable, achievable, relevant & time-bound) goals set. Automatic motivation deficit: provide environmental restructuring, enablement: habit paring strategies (linking to shower, prayer etc.), emotional reframing, reminder system, smoking cessation support
+Intervene to Empower patient on:
+1) Routine self-management: Visually examine both feet, including the sole and between the toes. Change shoes and socks regularly, dry feet after baths or exercise. When applying moisturizing cream avoid areas between toes. If the patient can't do this, educate a family member on foot-care principles, how to perform IpTT to detect LOPS, When/how to seek medical attention and keeping necessary telephone numbers handy.
+2) Trauma avoidance: Avoidance of barefoot walking inside and outside. Recommend appropriate footwear, and advise against shoes that are too small, tight, or rub against a particular area of the foot. Suggest yearly replacement of shoes-more frequently if they exhibit high wear. Avoidance of traditional remedies use, wearing open toe shoes, emphasizing the need to dry between toes after Wadoo. Encourage patients to attend the clinic 1 month prior to the Haj for: reevaluation of the at-risk feet category, reinforcement of education on diabetes care, foot care & avoidance of barefoot walking during the pilgrimage and use of appropriate shoes.
+3) Warning signs and acting: Report any new symptoms, lesions, discolorations, or swelling to a health care professional`,
+    followUp: 'Follow up: Urgent care required'
+  }
+};
+
+const LANGUAGE_PACK = {
+  en: {
+    patient_record_title: 'Patient Record',
+    patient_record_desc: 'The Health Care Professional asks the patient, examines the feet, records answers, and the tool returns: risk category of DFU, metabolic-cardio-renal comorbidities, risky behavior factors to the feet, and plan of action to prevent limb loss.',
+    clinical_workspace: 'Clinical workspace',
+    current_patient_focus: 'Current patient focus',
+    current_patient_focus_desc: 'The assessment page stays focused on the active patient only. Open the directory for the full patient list.',
+    patient_summary: 'Patient Summary',
+    assessment_progress: 'Assessment progress',
+    metabolic_cardio_renal_risk_factors: '2) Metabolic-Cardio-Renal Co-morbidities and Risk Factors',
+    detailed_plan_of_action: '4) Detailed plan of action',
+    final_patient_report: 'Final Patient Report',
+    assessment_history: 'Assessment history',
+    assessment_history_desc: 'Open earlier assessments for the current patient.',
+    complete_form_report: 'Complete the form to generate the report.',
+    report_intro: 'A clean, continuously visible report panel helps the doctor review the final narrative while answering questions and documenting the visit.',
+    new_patient: 'New patient',
+    new_assessment: 'New assessment',
+    clear_answers_only: 'Clear answers only',
+    patients_directory: 'Patients directory',
+    restore_auto_backup: 'Restore auto backup',
+    logout: 'Log out',
+    logout_successful: 'Log out successful.',
+    no_selected_factors_yet: 'No selected factors yet.',
+    no_selected_comb_risks_yet: 'No selected COM-B risks yet.',
+    no_active_patient_selected: 'No active patient selected',
+    start_or_open_patient: 'Start a new patient record or open a patient from the Patients directory.',
+    previous_visits: 'Previous visits',
+    latest_visit: 'Latest visit',
+    previous_status: 'Previous status',
+    no_saved_visits_yet: 'No saved visits yet.'
+  },
+  ar: {
+    patient_record_title: 'بيانات المريض',
+    patient_record_desc: 'يقوم مقدم الرعاية الصحية بطرح الأسئلة وفحص القدمين وتسجيل الإجابات، ثم تُظهر الأداة فئة خطر قرحة القدم السكرية والعوامل الأيضية القلبية الكلوية والسلوكيات الخطرة المتعلقة بالقدم وخطة العمل للوقاية من فقدان الطرف.',
+    clinical_workspace: 'مساحة العمل السريرية',
+    current_patient_focus: 'تركيز المريض الحالي',
+    current_patient_focus_desc: 'تبقى صفحة التقييم مركزة على المريض النشط فقط. افتح دليل المرضى لعرض القائمة الكاملة.',
+    patient_summary: 'ملخص المريض',
+    assessment_progress: 'تقدم التقييم',
+    metabolic_cardio_renal_risk_factors: '٢) الأمراض المصاحبة وعوامل الخطورة الأيضية القلبية الكلوية',
+    detailed_plan_of_action: '٤) الخطة العلاجية المفصلة',
+    final_patient_report: 'التقرير النهائي للمريض',
+    assessment_history: 'سجل التقييمات',
+    assessment_history_desc: 'افتح التقييمات السابقة للمريض الحالي.',
+    complete_form_report: 'أكمل النموذج لإنشاء التقرير.',
+    report_intro: 'لوحة تقرير واضحة وثابتة تساعد الطبيب على مراجعة التقرير النهائي أثناء الإجابة على الأسئلة وتوثيق الزيارة.',
+    new_patient: 'مريض جديد',
+    new_assessment: 'تقييم جديد',
+    clear_answers_only: 'مسح الإجابات فقط',
+    patients_directory: 'دليل المرضى',
+    restore_auto_backup: 'استعادة النسخة الاحتياطية التلقائية',
+    logout: 'تسجيل الخروج',
+    logout_successful: 'تم تسجيل الخروج بنجاح.',
+    no_selected_factors_yet: 'لا توجد عوامل محددة بعد.',
+    no_selected_comb_risks_yet: 'لا توجد مخاطر سلوكية محددة بعد.',
+    no_active_patient_selected: 'لا يوجد مريض نشط محدد',
+    start_or_open_patient: 'ابدأ سجل مريض جديد أو افتح مريضاً من دليل المرضى.',
+    previous_visits: 'الزيارات السابقة',
+    latest_visit: 'آخر زيارة',
+    previous_status: 'الحالة السابقة',
+    no_saved_visits_yet: 'لا توجد زيارات محفوظة بعد.'
+  }
+};
+
+function t(key){
+  const pack = LANGUAGE_PACK[currentLanguage] || LANGUAGE_PACK.en;
+  return pack[key] || LANGUAGE_PACK.en[key] || key;
+}
+
+const REPORT_HEADINGS = {
+  en: {
+    app_title: 'AssessDFUrisk&SaveTheLimbs',
+    app_title_ar: 'Diabetic Foot Ulcer Risk Assessment and Limb Salvage',
+    patient_identification: 'Patient Identification',
+    positive_questions: 'Positive Questions',
+    none_selected: 'None selected',
+    no_patient_details: 'No patient details entered',
+    date: 'Date',
+    name: 'Name',
+    id: 'ID',
+    age: 'Age',
+    gender: 'Gender',
+    physician: 'Physician',
+    clinic: 'Clinic',
+    assessment: 'Assessment',
+    notes: 'Notes',
+    follow_up: 'Follow up'
+  },
+  ar: {
+    app_title: 'تقييم خطر الإصابة بقرحة القدم السكرية و إنقاذ الأطراف',
+    app_title_ar: 'AssessDFUrisk&SaveTheLimbs',
+    patient_identification: 'بيانات المريض',
+    positive_questions: 'الأسئلة الإيجابية',
+    none_selected: 'لا يوجد',
+    no_patient_details: 'لا توجد بيانات مريض مدخلة',
+    date: 'التاريخ',
+    name: 'الاسم',
+    id: 'الرقم التعريفي',
+    age: 'العمر',
+    gender: 'الجنس',
+    physician: 'الطبيب',
+    clinic: 'العيادة',
+    assessment: 'التقييم',
+    notes: 'ملاحظات',
+    follow_up: 'المتابعة'
+  }
+};
+
+const QUESTION_TRANSLATIONS_AR = {
+  1:'هل توجد قرحة أو جرح سابق في الساق/القدم، أو بتر/جراحة غير رضحية في الطرف السفلي؟',
+  2:'هل يوجد تاريخ سابق لتوسيع شريان أو دعامة أو جراحة مجازة في الساق؟',
+  3:'هل مدة السكري طويلة أكثر من 10 سنوات؟',
+  4:'هل السكري غير مضبوط ومعظم قراءات HbA1c أعلى من 7%؟',
+  5:'هل يوجد اعتلال شبكية مرتبط بالسكري؟',
+  6:'هل يوجد مرض كلوي مزمن مرتبط بالسكري؟',
+  7:'هل يوجد فشل كلوي نهائي ESRD؟',
+  8:'هل يوجد مرض شريان تاجي أو مرض وعائي دماغي أو فشل قلب؟',
+  9:'هل يوجد ارتفاع ضغط الدم؟',
+  10:'هل يوجد اضطراب دهون الدم؟',
+  11:'هل يوجد ألم عصبي جديد أو ألم أثناء الراحة؟',
+  12:'هل يوجد إحساس بالحرقان أو التنميل في الساقين أو القدمين؟',
+  13:'هل يوجد فقدان للإحساس في الطرف السفلي؟',
+  14:'هل يوجد عرج أو ألم في الساق/القدم مع الحركة؟',
+  15:'هل توجد تغيرات في لون جلد القدم أو آفات جلدية؟',
+  16:'هل توجد جروح مفتوحة أو تشققات؟',
+  17:'هل توجد أظافر متغيرة اللون أو نامية للداخل أو طويلة؟',
+  18:'هل توجد علامات التهاب فطري؟',
+  19:'هل توجد آفات جلدية متغيرة اللون أو متسمكة أو كالو أو مسامير؟',
+  20:'هل يوجد تَمَوُّه بين الأصابع؟',
+  21:'هل المريض غير مستجيب لاختبار إبسويتش للمس؟',
+  22:'هل منتصف القدم حار أو أحمر أو ملتهب؟',
+  23:'هل توجد تشوهات واضحة مثل البونيون أو الإصبع المطرقية أو شاركو المزمن؟',
+  24:'هل توجد محدودية في مدى حركة المفاصل؟',
+  25:'هل نمو الشعر على ظهر القدم أو الطرف السفلي منخفض؟',
+  26:'هل النبضان الظهري والخلف الظنبوبي غير محسوسين مع أو بدون غرغرينا؟',
+  27:'هل توجد فروقات حرارة بين الساقين والقدمين أو بين القدم اليمنى واليسرى؟',
+  28:'هل الحذاء غير مناسب؟',
+  29:'هل المريض غير قادر على فحص القدمين بنفسه بسبب ضعف البصر أو السمنة أو التهاب المفاصل أو التشوه أو الهشاشة أو الخرف؟',
+  30:'هل يوجد عدم التزام بالخطة العلاجية مثل تفويت المواعيد أو الأدوية أو تأخير طلب الرعاية؟',
+  31:'هل يوجد عدم التزام بالفحص اليومي للقدمين بما في ذلك باطن القدم وبين الأصابع؟',
+  32:'هل يجهل علامات الإنذار مثل الاحمرار أو القرحة أو الإفرازات؟',
+  33:'هل يجهل متى يطلب الرعاية العاجلة؟',
+  34:'هل يجهل أن الاعتلال العصبي قد يكون بلا ألم؟',
+  35:'هل يجهل أهمية فحص القدمين سنوياً حتى عند عدم وجود مشاكل؟',
+  36:'هل يجهل متى يجب تخفيف مستوى النشاط؟',
+  37:'هل يوجد عدم التزام بإبقاء القدمين جافتين وتغيير الجوارب والأحذية وتجفيف ما بين الأصابع؟',
+  38:'هل يوجد عدم التزام باستخدام المرطب مع تجنب المناطق بين الأصابع؟',
+  39:'هل يمشي حافياً داخل المنزل؟',
+  40:'هل يمشي حافياً خارج المنزل؟',
+  41:'هل يلبس الحذاء دون جوارب؟',
+  42:'هل يوجد عدم التزام بفحص الحذاء قبل ارتدائه؟',
+  43:'هل يوجد عدم التزام بقص أو برد الأظافر بانتظام؟',
+  44:'هل يستخدم أدوات كاشطة لعلاج المسمار؟',
+  45:'هل يوجد ضعف في الوصول للرعاية الصحية مثل المناطق الريفية أو المخيمات أو مناطق الحرب؟',
+  46:'هل توجد قيود مالية أو غياب التأمين الصحي؟',
+  47:'هل يوجد اكتئاب أو عزلة اجتماعية أو يعيش وحيداً؟',
+  48:'هل يرتدي شبشب أو صندل مفتوح؟',
+  49:'هل يمارس نقع القدمين؟',
+  50:'هل يستخدم قربة ماء ساخن أو يقرّب القدمين من المدفأة؟',
+  51:'هل يستخدم علاجات شعبية مثل الحجامة أو الكي لمشاكل القدم؟',
+  52:'هل لا يستشير طبيبه قبل الذهاب للحج؟',
+  53:'هل لا يجفف بين الأصابع بعد الوضوء؟',
+  54:'هل يشعر بالحرج من كشف القدمين؟',
+  55:'هل يوجد عدم التزام بممارسة الرياضة إذا كان قادراً؟',
+  56:'هل يعتقد أن قرح القدم لا يمكن الوقاية منها؟',
+  57:'هل يوجد تدخين أو استخدام للنيكوتين؟',
+  58:'هل يعتقد أن فحص القدم ليس أولوية وأن القرح ليست خطيرة؟',
+  59:'هل يقول لا يوجد ألم إذن القدم بخير؟',
+  60:'هل يتجنب الفحص خوفاً من اكتشاف مضاعفات؟'
+};
+
+let currentLanguage = 'en';
+
+function setLanguage(lang){
+  currentLanguage = lang === 'ar' ? 'ar' : 'en';
+  try{ storage.setItem('dfu_language_v1', currentLanguage); }catch(e){}
+  applyTranslations();
+}
+
+function applyTranslations(){
+  try{
+    currentLanguage = storage.getItem('dfu_language_v1') || currentLanguage || 'en';
+  }catch(e){}
+  const isArabic = currentLanguage === 'ar';
+  document.documentElement.lang = isArabic ? 'ar' : 'en';
+  document.documentElement.dir = 'ltr';
+
+  const appScreen = document.getElementById('appScreen');
+  const authScreen = document.getElementById('authScreen');
+  if(appScreen) appScreen.setAttribute('dir', isArabic ? 'rtl' : 'ltr');
+  if(authScreen) authScreen.setAttribute('dir', 'ltr');
+
+  const sel = document.getElementById('languageSelect');
+  if(sel) sel.value = currentLanguage;
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    const pack = LANGUAGE_PACK[currentLanguage] || LANGUAGE_PACK.en;
+    if(pack[key]) el.textContent = pack[key];
+  });
+  const metabolicEl = document.getElementById('metabolic');
+  if(metabolicEl && !metabolicEl.querySelector('ul') && !metabolicEl.querySelector('li')) metabolicEl.textContent = t('no_selected_factors_yet');
+  const combEl = document.getElementById('comb');
+  if(combEl && !combEl.querySelector('ul') && !combEl.querySelector('li')) combEl.textContent = t('no_selected_comb_risks_yet');
+  updateSummary();
+  calculate();
+  allQuestions.forEach(q => {
+    const qEl = document.querySelector(`#yes-${q.id}`)?.closest('.question')?.querySelector('.qtext');
+    if(qEl){ qEl.textContent = isArabic ? (QUESTION_TRANSLATIONS_AR[q.id] || q.text) : q.text; }
+    const yesBtn = document.getElementById(`yes-${q.id}`);
+    const noBtn = document.getElementById(`no-${q.id}`);
+    if(yesBtn) yesBtn.textContent = isArabic ? 'نعم' : 'Yes';
+    if(noBtn) noBtn.textContent = isArabic ? 'لا' : 'No';
+  });
+}
+
+const answers = {};
+let fullPlanVisible = true;
+let currentPatientId = null;
+let currentAssessmentId = null;
+let creatingNewPatient = true;
+
+function escapeHtml(value){
+  return String(value ?? '')
+    .replaceAll('&','&amp;')
+    .replaceAll('<','&lt;')
+    .replaceAll('>','&gt;')
+    .replaceAll('"','&quot;')
+    .replaceAll("'",'&#39;');
+}
+
+function uid(prefix='id'){
+  return `${prefix}_${Date.now()}_${Math.random().toString(36).slice(2,8)}`;
+}
+
+function getAccount(){
+  migrateSingleAccountToMulti();
+  const active = getActiveUsername();
+  if(active) return getAccountForUsername(active);
+  const accounts = getAccounts();
+  const keys = Object.keys(accounts);
+  if(keys.length === 1) return getAccountForUsername(keys[0]);
+  return null;
+}
+
+function getStoredAccountRaw(){
+  try{
+    const active = getActiveUsername();
+    if(active) return normalizeAccount(getAccounts()[active]);
+    return normalizeAccount(JSON.parse(storage.getItem(STORAGE_KEYS.account) || 'null'));
+  }catch(e){
+    return null;
+  }
+}
+
+function isUsableAccount(account){
+  return !!(account && String(account.username || '').trim() && String(account.password || '').length >= 4);
+}
+
+function setAccount(account){
+  const normalized = normalizeAccount(account);
+  if(!isUsableAccount(normalized)) return;
+  const key = normalizeUsername(normalized.username);
+  const accounts = getAccounts();
+  normalized.updatedAt = new Date().toISOString();
+  accounts[key] = normalized;
+  setAccounts(accounts);
+  setActiveUsername(key);
+  storage.setItem(STORAGE_KEYS.account, JSON.stringify(normalized));
+  idbSaveAccountMirror(normalized);
+  saveAutoBackup('account');
+  notifyDataSync('account');
+}
+
+function clearStoredAccount(){
+  const active = getActiveUsername();
+  if(active){
+    const accounts = getAccounts();
+    delete accounts[active];
+    setAccounts(accounts);
+    setActiveUsername('');
+    storage.removeItem(STORAGE_KEYS.account);
+    idbSaveAccountMirror(null);
+    return;
+  }
+  storage.removeItem(STORAGE_KEYS.account);
+  idbSaveAccountMirror(null);
+}
+
+function hasAccount(){
+  migrateSingleAccountToMulti();
+  return Object.keys(getAccounts()).some(key => isUsableAccount(normalizeAccount(getAccounts()[key])));
+}
+
+function showAuthMode(mode){
+  document.getElementById('signupPanel').classList.toggle('hidden', mode !== 'signup');
+  document.getElementById('loginPanel').classList.toggle('hidden', mode !== 'login');
+  document.getElementById('changePasswordPanel').classList.toggle('hidden', mode !== 'change');
+  document.getElementById('forgotPasswordPanel').classList.toggle('hidden', mode !== 'forgot');
+  document.getElementById('authStatus').textContent = '';
+
+  const workspaceBtn = document.getElementById('workspaceTabBtn');
+  const directoryBtn = document.getElementById('directoryTabBtn');
+  if(workspaceBtn) workspaceBtn.classList.toggle('active', mode === 'login');
+  if(directoryBtn) directoryBtn.classList.toggle('active', mode === 'signup');
+
+  if(mode === 'forgot') updateRecoveryMode();
+}
+
+function generateRecoveryCode(){
+  const seg = () => Math.random().toString(36).slice(2,6).toUpperCase();
+  return `DFU-${seg()}-${seg()}-${seg()}`;
+}
+
+function displayRecoveryCode(code, title='Recovery code'){
+  window.prompt(`${title}
+
+Copy and save this code in a safe place.`, code);
+}
+
+function ensureRecoveryCodeForExistingAccount(){
+  const account = getAccount();
+  if(!account || account.recoveryCode) return;
+  const newCode = generateRecoveryCode();
+  setAccount({
+    username: account.username,
+    password: account.password,
+    recoveryCode: newCode,
+    recoverySpecialty: account.recoverySpecialty,
+    recoveryWorkplace: account.recoveryWorkplace,
+    securityQuestion: account.securityQuestion,
+    securityAnswer: account.securityAnswer,
+    createdAt: account.createdAt
+  });
+  setTimeout(() => displayRecoveryCode(newCode, 'New recovery code'), 120);
+}
+
+
+function signup(){
+  const username = document.getElementById('signupUsername').value.trim();
+  const password = document.getElementById('signupPassword').value.trim();
+  const confirm = document.getElementById('signupConfirmPassword').value.trim();
+  const status = document.getElementById('authStatus');
+
+  migrateSingleAccountToMulti();
+
+  if(!username || username.length < 3){
+    status.textContent = 'Username must be at least 3 characters.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+  if(!password || password.length < 4){
+    status.textContent = 'Password must be at least 4 characters.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+  if(password !== confirm){
+    status.textContent = 'Password and confirmation do not match.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+
+  if(getAccountForUsername(username)){
+    status.textContent = 'This username already exists on this device. Please log in with it or choose a different username.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+
+  const recoveryCode = generateRecoveryCode();
+  setAccount({ username, password, recoveryCode, createdAt: new Date().toISOString() });
+  const byUser = getPatientsByUser();
+  const key = normalizeUsername(username);
+  if(!Array.isArray(byUser[key])){
+    byUser[key] = [];
+    setPatientsByUser(byUser);
+  }
+  setLoginState(true);
+  notifyDataSync('signup');
+  status.textContent = 'Account created successfully.';
+  status.style.color = 'var(--success)';
+  try{ displayRecoveryCode(recoveryCode); }catch(error){ console.warn('Recovery code prompt skipped:', error); }
+  clearAuthInputs();
+  openApp();
+}
+
+async function login(){
+  const username = document.getElementById('loginUsername').value.trim();
+  const password = document.getElementById('loginPassword').value.trim();
+  const status = document.getElementById('authStatus');
+
+  if(!username || !password){
+    status.textContent = 'Enter username and password.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+
+  migrateSingleAccountToMulti();
+  let account = getAccountForUsername(username);
+  if(!isUsableAccount(account)){
+    await restoreStateFromIndexedDBIfNeeded();
+    migrateSingleAccountToMulti();
+    account = getAccountForUsername(username);
+  }
+
+  if(!isUsableAccount(account)){
+    setLoginState(false);
+    status.textContent = 'No account found for this username. Use First time setup to create it.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+
+  const passwordMatches = password === String(account.password || '').trim();
+  if(passwordMatches){
+    setActiveUsername(username);
+    storage.setItem(STORAGE_KEYS.account, JSON.stringify(account));
+    setLoginState(true);
+    notifyDataSync('login');
+    clearAuthInputs();
+    openApp();
+    status.textContent = '';
+  }else{
+    setLoginState(false);
+    status.textContent = 'Incorrect username or password.';
+    status.style.color = 'var(--danger)';
+  }
+}
+
+function changePassword(){
+  const username = document.getElementById('changeUsername').value.trim();
+  const current = document.getElementById('currentPassword').value;
+  const next = document.getElementById('newPassword').value;
+  const confirm = document.getElementById('confirmPassword').value;
+  const account = getAccountForUsername(username) || getAccount();
+  const status = document.getElementById('authStatus');
+
+  if(!account){
+    status.textContent = 'No account yet. Use First time setup first.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+  if(username !== account.username || current !== account.password){
+    status.textContent = 'Username or current password is incorrect.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+  if(!next || next.length < 4){
+    status.textContent = 'New password must be at least 4 characters.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+  if(next !== confirm){
+    status.textContent = 'New password and confirmation do not match.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+
+  setAccount({
+    username: account.username,
+    password: next,
+    recoveryCode: account.recoveryCode || generateRecoveryCode(),
+    recoverySpecialty: account.recoverySpecialty,
+    recoveryWorkplace: account.recoveryWorkplace,
+    securityQuestion: account.securityQuestion,
+    securityAnswer: account.securityAnswer,
+    createdAt: account.createdAt
+  });
+  status.textContent = 'Password changed successfully.';
+  status.style.color = 'var(--success)';
+  ['currentPassword','newPassword','confirmPassword'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+}
+
+function showRecoveryCode(){
+  const username = document.getElementById('changeUsername').value.trim();
+  const current = document.getElementById('currentPassword').value;
+  const account = getAccountForUsername(username) || getAccount();
+  const status = document.getElementById('authStatus');
+  if(!account || normalizeUsername(username) !== normalizeUsername(account.username) || current !== account.password){
+    status.textContent = 'Enter the correct username and current password first.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+  const code = account.recoveryCode || generateRecoveryCode();
+  if(!account.recoveryCode){
+    setAccount({
+      username: account.username,
+      password: account.password,
+      recoveryCode: code,
+      recoverySpecialty: account.recoverySpecialty,
+      recoveryWorkplace: account.recoveryWorkplace,
+      securityQuestion: account.securityQuestion,
+      securityAnswer: account.securityAnswer,
+      createdAt: account.createdAt
+    });
+  }
+  displayRecoveryCode(code);
+  status.textContent = 'Recovery code displayed.';
+  status.style.color = 'var(--success)';
+}
+
+function regenerateRecoveryCode(){
+  const username = document.getElementById('changeUsername').value.trim();
+  const current = document.getElementById('currentPassword').value;
+  const account = getAccountForUsername(username) || getAccount();
+  const status = document.getElementById('authStatus');
+  if(!account || normalizeUsername(username) !== normalizeUsername(account.username) || current !== account.password){
+    status.textContent = 'Enter the correct username and current password first.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+  if(!window.confirm('Generate a new recovery code? The old code will stop working.')) return;
+  const code = generateRecoveryCode();
+  setAccount({
+    username: account.username,
+    password: account.password,
+    recoveryCode: code,
+    recoverySpecialty: account.recoverySpecialty,
+    recoveryWorkplace: account.recoveryWorkplace,
+    securityQuestion: account.securityQuestion,
+    securityAnswer: account.securityAnswer,
+    createdAt: account.createdAt
+  });
+  displayRecoveryCode(code, 'New recovery code');
+  status.textContent = 'New recovery code generated.';
+  status.style.color = 'var(--success)';
+}
+
+function updateRecoveryMode(){
+  const holder = document.getElementById('legacyRecoveryBox');
+  const codeField = document.getElementById('emergencyRecoveryCode');
+  if(!holder || !codeField) return;
+  const username = document.getElementById('emergencyUsername')?.value.trim();
+  const account = getAccountForUsername(username) || getAccount();
+  holder.classList.add('hidden');
+  holder.innerHTML = '';
+  codeField.disabled = false;
+  if(!account || !username || username !== account.username) return;
+  if(account.recoveryCode) return;
+
+  codeField.disabled = true;
+  if(account.recoverySpecialty && account.recoveryWorkplace){
+    holder.classList.remove('hidden');
+    holder.innerHTML = `
+      <div class="small">Legacy account recovery</div>
+      <div class="field-grid" style="margin-top:12px;">
+        <div class="field">
+          <label for="emergencyRecoverySpecialty">Confirm specialty</label>
+          <select id="emergencyRecoverySpecialty">
+            <option value="">Select specialty</option>
+            <option>Family medicine</option>
+            <option>Internal medicine</option>
+            <option>Endocrinology / diabetes</option>
+            <option>Vascular surgery</option>
+            <option>Orthopedics</option>
+            <option>Podiatry / foot care</option>
+            <option>General practice</option>
+            <option>Nursing / educator</option>
+            <option>Other</option>
+          </select>
+        </div>
+        <div class="field">
+          <label for="emergencyRecoveryWorkplace">Confirm workplace type</label>
+          <select id="emergencyRecoveryWorkplace">
+            <option value="">Select workplace type</option>
+            <option>Hospital clinic</option>
+            <option>Primary care clinic</option>
+            <option>Private clinic</option>
+            <option>University / teaching hospital</option>
+            <option>Diabetes center</option>
+            <option>Wound / foot clinic</option>
+            <option>Mobile / outreach service</option>
+            <option>Other</option>
+          </select>
+        </div>
+      </div>`;
+    return;
+  }
+  if(account.securityQuestion && account.securityAnswer){
+    holder.classList.remove('hidden');
+    holder.innerHTML = `
+      <div class="small">Legacy account recovery</div>
+      <div class="field" style="margin-top:12px;">
+        <label for="emergencySecurityAnswer">${escapeHtml(account.securityQuestion)}</label>
+        <input id="emergencySecurityAnswer" placeholder="Your answer">
+      </div>`;
+  }
+}
+
+function verifyRecoveryAnswer(){
+  const recoveryUsername = document.getElementById('emergencyUsername')?.value.trim() || getActiveUsername();
+  const account = getAccountForUsername(recoveryUsername) || getAccount();
+  if(!account) return false;
+  if(account.recoveryCode){
+    const code = document.getElementById('emergencyRecoveryCode')?.value.trim().toUpperCase() || '';
+    return code === account.recoveryCode.toUpperCase();
+  }
+  if(account.recoverySpecialty && account.recoveryWorkplace){
+    const specialty = document.getElementById('emergencyRecoverySpecialty')?.value.trim() || '';
+    const workplace = document.getElementById('emergencyRecoveryWorkplace')?.value.trim() || '';
+    return specialty === account.recoverySpecialty && workplace === account.recoveryWorkplace;
+  }
+  const answer = document.getElementById('emergencySecurityAnswer')?.value.trim().toLowerCase() || '';
+  return !!account.securityAnswer && answer === account.securityAnswer;
+}
+
+function emergencyResetAccess(){
+  const username = document.getElementById('emergencyUsername').value.trim();
+  const next = document.getElementById('emergencyNewPassword').value;
+  const confirm = document.getElementById('emergencyConfirmPassword').value;
+  const account = getAccountForUsername(username);
+  const status = document.getElementById('authStatus');
+
+  if(!account){
+    status.textContent = 'No account found on this device.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+  if(username !== account.username){
+    status.textContent = 'Username is incorrect.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+  if(!account.recoveryCode && !account.recoverySpecialty && !(account.securityQuestion && account.securityAnswer)){
+    status.textContent = 'This account does not have a recovery method yet.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+  if(!next || next.length < 4){
+    status.textContent = 'New password must be at least 4 characters.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+  if(next !== confirm){
+    status.textContent = 'New password and confirmation do not match.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+  if(!verifyRecoveryAnswer()){
+    status.textContent = account.recoveryCode ? 'Recovery code is incorrect.' : 'Recovery details are incorrect.';
+    status.style.color = 'var(--danger)';
+    return;
+  }
+  const confirmed = window.confirm('Reset the local account on this device and keep all patient records?');
+  if(!confirmed) return;
+
+  setAccount({
+    username: account.username,
+    password: next,
+    recoveryCode: account.recoveryCode || generateRecoveryCode(),
+    recoverySpecialty: account.recoverySpecialty,
+    recoveryWorkplace: account.recoveryWorkplace,
+    securityQuestion: account.securityQuestion,
+    securityAnswer: account.securityAnswer,
+    createdAt: account.createdAt
+  });
+  status.textContent = 'Device access reset completed. Patient data was kept.';
+  status.style.color = 'var(--success)';
+  ['emergencyUsername','emergencyRecoveryCode','emergencyNewPassword','emergencyConfirmPassword','emergencySecurityAnswer','emergencyRecoverySpecialty','emergencyRecoveryWorkplace'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+  showAuthMode('login');
+}
+
+function openApp(){
+  ensureRecoveryCodeForExistingAccount();
+  const auth = document.getElementById('authScreen');
+  const app = document.getElementById('appScreen');
+  if(auth) auth.classList.add('hidden');
+  if(app) app.classList.remove('hidden');
+  showAppView('workspace');
+  renderPatientsList();
+  applyTranslations();
+}
+
+function clearAuthInputs(){
+  ['loginUsername','loginPassword','signupUsername','signupPassword','signupConfirmPassword','changeUsername','currentPassword','newPassword','confirmPassword','emergencyUsername','emergencyRecoveryCode','emergencyNewPassword','emergencyConfirmPassword'].forEach(id => {
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+}
+
+function logout(){
+  const confirmed = window.confirm('Log out from this device session?');
+  if(!confirmed) return;
+
+  setLoginState(false);
+  setActiveUsername('');
+  currentPatientId = null;
+  currentAssessmentId = null;
+  creatingNewPatient = true;
+  clearAuthInputs();
+  startNewPatient();
+  showAppView('workspace');
+  updateCurrentPatientHub();
+  notifyDataSync('logout');
+  showAuthScreen(hasAccount() ? 'login' : 'signup');
+  setStatusMessage(t('logout_successful'), 'var(--success)');
+}
+
+function getPatients(){
+  try{
+    migrateSingleAccountToMulti();
+    const username = getCurrentDataUsername();
+    if(username){
+      const byUser = getPatientsByUser();
+      return Array.isArray(byUser[username]) ? byUser[username] : [];
+    }
+    return JSON.parse(storage.getItem(STORAGE_KEYS.patients) || '[]');
+  }catch(e){
+    return [];
+  }
+}
+
+function setPatients(items){
+  const safeItems = Array.isArray(items) ? items : [];
+  const username = getCurrentDataUsername();
+  if(username){
+    const byUser = getPatientsByUser();
+    byUser[username] = safeItems;
+    setPatientsByUser(byUser);
+  }
+  storage.setItem(STORAGE_KEYS.patients, JSON.stringify(safeItems));
+  saveAutoBackup('patients');
+  idbSavePatientsMirror(safeItems);
+  notifyDataSync('patients');
+}
+
+
+function getSyncSnapshot(){
+  return {
+    account: storage.getItem(STORAGE_KEYS.account) || '',
+    accounts: storage.getItem(STORAGE_KEYS.accounts) || '',
+    activeUser: storage.getItem(STORAGE_KEYS.activeUser) || '',
+    patients: storage.getItem(STORAGE_KEYS.patients) || '',
+    patientsByUser: storage.getItem(STORAGE_KEYS.patientsByUser) || '',
+    login: storage.getItem(STORAGE_KEYS.login) || '',
+    pulse: storage.getItem(SYNC_KEYS.pulse) || ''
+  };
+}
+
+function captureSyncSnapshot(){
+  const snapshot = getSyncSnapshot();
+  lastSeenAccountRaw = snapshot.account;
+  lastSeenPatientsRaw = snapshot.patients;
+  lastSeenLoginRaw = snapshot.login;
+  lastSeenSyncPulse = snapshot.pulse;
+}
+
+function notifyDataSync(reason='update'){
+  const payload = JSON.stringify({
+    reason,
+    at: new Date().toISOString()
+  });
+  try{
+    storage.setItem(SYNC_KEYS.pulse, payload);
+  }catch(error){
+    console.warn('Sync pulse failed:', error);
+  }
+  if(syncChannel){
+    try{
+      syncChannel.postMessage(payload);
+    }catch(error){
+      console.warn('Broadcast sync failed:', error);
+    }
+  }
+  captureSyncSnapshot();
+}
+
+function refreshViewAfterExternalSync(){
+  const currentPatientExists = !!getCurrentPatientObject();
+  const loggedIn = storage.getItem(STORAGE_KEYS.login) === '1' && hasAccount();
+
+  renderPatientsList();
+  renderAssessmentHistory();
+  updateCurrentPatientHub();
+
+  if(currentPatientId && currentPatientExists){
+    if(currentAssessmentId){
+      openAssessment(currentPatientId, currentAssessmentId);
+    }else{
+      openPatient(currentPatientId);
+    }
+  }else if(currentPatientId && !getCurrentPatientObject()){
+    currentPatientId = null;
+    currentAssessmentId = null;
+    creatingNewPatient = true;
+    resetForm(false);
+  }
+
+  if(loggedIn){
+    openApp();
+  }else{
+    showAuthScreen(hasAccount() ? 'login' : 'signup');
+  }
+
+  captureSyncSnapshot();
+  setStatusMessage('Data synchronized from another open copy.', 'var(--success)');
+}
+
+function restorePatientsFromIndexedDBIfNeeded(){
+  if(!shouldUseIndexedDB()){
+    return Promise.resolve();
+  }
+  return restoreStateFromIndexedDBIfNeeded();
+}
+
+async function syncFromSharedStorage(force=false){
+  await restorePatientsFromIndexedDBIfNeeded();
+  const snapshot = getSyncSnapshot();
+  const changed = force ||
+    snapshot.account !== lastSeenAccountRaw ||
+    snapshot.patients !== lastSeenPatientsRaw ||
+    snapshot.login !== lastSeenLoginRaw ||
+    snapshot.pulse !== lastSeenSyncPulse;
+
+  if(!changed) return;
+
+  refreshViewAfterExternalSync();
+}
+
+function setupCrossWindowSync(){
+  captureSyncSnapshot();
+
+  window.addEventListener('storage', event => {
+    const watchedKeys = [
+      STORAGE_KEYS.account,
+      STORAGE_KEYS.accounts,
+      STORAGE_KEYS.activeUser,
+      STORAGE_KEYS.patients,
+      STORAGE_KEYS.patientsByUser,
+      STORAGE_KEYS.login,
+      STORAGE_KEYS.autoBackup,
+      SYNC_KEYS.pulse
+    ];
+    if(watchedKeys.includes(event.key)){
+      syncFromSharedStorage(true);
+    }
+  });
+
+  if(typeof BroadcastChannel !== 'undefined'){
+    try{
+      syncChannel = new BroadcastChannel('dfu_app_sync_channel_v1');
+      syncChannel.addEventListener('message', () => syncFromSharedStorage(true));
+    }catch(error){
+      console.warn('BroadcastChannel unavailable:', error);
+    }
+  }
+
+  window.setInterval(() => syncFromSharedStorage(false), SYNC_PULSE_INTERVAL_MS);
+}
+
+
+function setTodayDate(){
+  const input = document.getElementById('assessmentDate');
+  if(!input.value){
+    const now = new Date();
+    input.value = `${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}`;
+  }
+}
+
+function renderQuestions(){
+  const holder = document.getElementById('questions');
+  holder.innerHTML = '';
+
+  questionDomains.forEach(domain => {
+    const sectionEl = document.createElement('section');
+    sectionEl.className = 'domain';
+
+    let questionsHtml = '<div class="questions-wrap">';
+    domain.sections.forEach((section, index) => {
+      if(section.title){
+        questionsHtml += `<div class="subsection-title">${escapeHtml(section.title)}</div>`;
+      }
+      section.questions.forEach(q => {
+        const isKey = keyQuestions.has(q.id);
+        questionsHtml += `
+          <div class="question ${isKey ? 'highlight' : ''}">
+            <div class="question-top">
+              <span class="qnum ${isKey ? 'highlight' : ''}">${q.id}</span>
+              <div class="qtext">${escapeHtml(q.text)}</div>
+            </div>
+            <div class="btns">
+              <button class="answer-btn" id="yes-${q.id}" onclick="setAnswer(${q.id}, 'yes')">Yes</button>
+              <button class="answer-btn" id="no-${q.id}" onclick="setAnswer(${q.id}, 'no')">No</button>
+            </div>
+          </div>`;
+      });
+    });
+    questionsHtml += '</div>';
+
+    sectionEl.innerHTML = `
+      <div class="domain-head">
+        <div class="domain-title">${escapeHtml(domain.title)}</div>
+        <div class="domain-desc">${escapeHtml(domain.description)}</div>
+      </div>
+      ${questionsHtml}
+    `;
+    holder.appendChild(sectionEl);
+  });
+}
+
+function getPatientFields(){
+  return {
+    assessmentDate: document.getElementById('assessmentDate').value.trim(),
+    patientName: document.getElementById('patientName').value.trim(),
+    patientId: document.getElementById('patientId').value.trim(),
+    patientAge: document.getElementById('patientAge').value.trim(),
+    patientGender: document.getElementById('patientGender').value.trim(),
+    physician: document.getElementById('physician').value.trim(),
+    clinic: document.getElementById('clinic').value.trim(),
+    visitLabel: document.getElementById('visitLabel').value.trim(),
+    patientNotes: document.getElementById('patientNotes').value.trim()
+  };
+}
+
+function updateSummary(){
+  const data = getPatientFields();
+  const block = document.getElementById('summaryBlock');
+  const labels = REPORT_HEADINGS[currentLanguage] || REPORT_HEADINGS.en;
+  const entries = [
+    [labels.date, data.assessmentDate || '—'],
+    [labels.name, data.patientName || '—'],
+    [labels.id, data.patientId || '—'],
+    [labels.age, data.patientAge || '—'],
+    [labels.gender, data.patientGender || '—'],
+    [labels.physician, data.physician || '—'],
+    [labels.clinic, data.clinic || '—'],
+    [labels.assessment, data.visitLabel || '—'],
+    [labels.notes, data.patientNotes || '—']
+  ];
+
+  block.innerHTML = entries.map(([label,value]) => `
+    <div class="summary-line">
+      <div class="summary-label">${escapeHtml(label)}</div>
+      <div class="summary-value">${escapeHtml(value)}</div>
+    </div>
+  `).join('');
+  updateProgress();
+}
+
+function updateProgress(){
+  const answeredCount = Object.keys(answers).length;
+  const total = allQuestions.length;
+  const percent = Math.round((answeredCount / total) * 100);
+  document.getElementById('progressText').textContent = `${answeredCount} / ${total} answered`;
+  document.getElementById('progressFill').style.width = `${percent}%`;
+}
+
+function setAnswer(id, value){
+  answers[id] = value;
+  updateButtons();
+  calculate();
+}
+
+function updateButtons(){
+  updateSummary();
+  calculate();
+  allQuestions.forEach(q => {
+    const yesBtn = document.getElementById(`yes-${q.id}`);
+    const noBtn = document.getElementById(`no-${q.id}`);
+    if(!yesBtn || !noBtn) return;
+    yesBtn.classList.toggle('active-yes', answers[q.id] === 'yes');
+    noBtn.classList.toggle('active-no', answers[q.id] === 'no');
+  });
+  updateProgress();
+}
+
+function yes(id){
+  return answers[id] === 'yes';
+}
+
+function getAssessmentData(){
+  /* Risk Category criteria updated from Word file dated 03/05/2026.
+     Urgent: any of Q11, Q15, Q16, Q22, Q27.
+     LOPS: Q21 only. PAD: Q2, Q14 or Q26. Deformity: Q23 or Q24.
+     History of foot ulcer/amputation: Q1. ESRD: Q7. */
+  const UrgentFlag = [11,15,16,22,27].some(yes) ? 1 : 0;
+  const LOPSFlag = yes(21) ? 1 : 0;
+  const PADFlag = [2,14,26].some(yes) ? 1 : 0;
+  const DeformityFlag = [23,24].some(yes) ? 1 : 0;
+  const HistoryFlag = yes(1) ? 1 : 0;
+  const ESRDFlag = yes(7) ? 1 : 0;
+
+  let riskScore = '0';
+  if(UrgentFlag === 1){
+    riskScore = 'URGENT';
+  }else if(HistoryFlag === 1){
+    riskScore = '3';
+  }else if(
+    ((LOPSFlag || PADFlag) && (HistoryFlag || ESRDFlag))
+  ){
+    riskScore = '3';
+  }else if(
+    (LOPSFlag && PADFlag) ||
+    (LOPSFlag && DeformityFlag) ||
+    (PADFlag && DeformityFlag)
+  ){
+    riskScore = '2';
+  }else if(
+    (LOPSFlag && !PADFlag) ||
+    (!LOPSFlag && PADFlag)
+  ){
+    riskScore = '1';
+  }
+
+  const flags = { UrgentFlag, LOPSFlag, PADFlag, DeformityFlag, HistoryFlag, ESRDFlag };
+
+  const metabolic = Object.entries(metabolicMap)
+    .filter(([id]) => yes(Number(id)))
+    .map(([id, text]) => `${id}. ${text}`);
+
+  const comb = [];
+
+  if(yes(29)){
+    comb.push('Poor physical capacity due to poor vision, obesity, arthritis, foot deformity, frailty, or dementia.');
+  }
+  if(yes(30)){
+    comb.push('Poor psychological capacity due to nonadherence to management plans.');
+  }
+  if([28,31,32,33,34,35,36,37,38,39,40,41,42,43,44].some(yes)){
+    comb.push('Poor psychological capacity due to lack of knowledge.');
+  }
+  if(yes(28) || yes(45) || yes(46)){
+    const parts = [];
+    if(yes(28)) parts.push('limited access to appropriate footwear options');
+    if(yes(45)) parts.push('poor access to health care');
+    if(yes(46)) parts.push('financial constraints');
+    comb.push(`Poor physical opportunity due to ${parts.join(' and ')}.`);
+  }
+
+  const socialParts = [];
+  if(yes(28)) socialParts.push('issues related to footwear habits, customs, or social-context use');
+  if(yes(47)) socialParts.push('depression, isolation, or living alone');
+  if([48,49,50].some(yes)) socialParts.push('following social norms');
+  if(yes(51)) socialParts.push('following social misconceptions');
+  if(yes(52)) socialParts.push('unawareness of potential risks to the feet during Hajj');
+  if(yes(53)) socialParts.push('avoiding drying between toes after Wadoo');
+  if(yes(54)) socialParts.push('embarrassment of exposing feet');
+  if(socialParts.length) comb.push(`Poor social opportunity due to ${socialParts.join('; ')}.`);
+
+  const reflectiveParts = [];
+  if(yes(55)) reflectiveParts.push('avoidance of exercise');
+  if(yes(56)) reflectiveParts.push('belief that preventative measures are not effective');
+  if(reflectiveParts.length) comb.push(`Poor reflective motivation due to ${reflectiveParts.join(' and ')}.`);
+
+  const automaticParts = [];
+  if(yes(57)) automaticParts.push('smoking');
+  const examAvoidance = [];
+  if(yes(58)) examAvoidance.push('foot examination is not a priority');
+  if(yes(59)) examAvoidance.push('absence of pain');
+  if(yes(60)) examAvoidance.push('fear');
+  if(examAvoidance.length) automaticParts.push(`avoidance of foot exam due to ${examAvoidance.join(', ')}`);
+  if(automaticParts.length) comb.push(`Poor automatic motivation due to ${automaticParts.join(' and ')}.`);
+
+  return { riskScore, flags, metabolic, comb, plan: actionPlans[riskScore] };
+}
+
+function getPatientSummaryItems(){
+  const data = getPatientFields();
+  const labels = REPORT_HEADINGS[currentLanguage] || REPORT_HEADINGS.en;
+  const items = [];
+  if(data.assessmentDate) items.push(`${labels.date}: ${data.assessmentDate}`);
+  if(data.patientName) items.push(`${labels.name}: ${data.patientName}`);
+  if(data.patientId) items.push(`${labels.id}: ${data.patientId}`);
+  if(data.patientAge) items.push(`${labels.age}: ${data.patientAge}`);
+  if(data.patientGender) items.push(`${labels.gender}: ${data.patientGender}`);
+  if(data.physician) items.push(`${labels.physician}: ${data.physician}`);
+  if(data.clinic) items.push(`${labels.clinic}: ${data.clinic}`);
+  if(data.visitLabel) items.push(`${labels.assessment}: ${data.visitLabel}`);
+  if(data.patientNotes) items.push(`${labels.notes}: ${data.patientNotes}`);
+  return items;
+}
+
+function getSelectedQuestionList(){
+  return Object.keys(answers)
+    .filter(id => answers[id] === 'yes')
+    .map(id => `${id}. ${questionTextMap[id]}`);
+}
+
+function buildReportText(){
+  const labels = REPORT_HEADINGS[currentLanguage] || REPORT_HEADINGS.en;
+  const data = getAssessmentData();
+  const lines = [];
+
+  lines.push(labels.app_title);
+  lines.push('');
+  lines.push('Developed by: Amal Y. Madanat MD PhD, Saqer R. Madanat Bac MIS');
+  lines.push('');
+  lines.push(`DFU Risk Category: ${data.riskScore}`);
+  lines.push(data.plan.riskStrip);
+  lines.push('');
+  lines.push('2) Metabolic-Cardio-Renal Co-morbidities and Risk Factors:');
+  lines.push(data.metabolic.length ? data.metabolic.join('\n') : labels.none_selected);
+  lines.push('');
+  lines.push('3) Risky Foot-Health COM-Behavior:');
+  lines.push(data.comb.length ? data.comb.join('\n') : labels.none_selected);
+  lines.push('');
+  lines.push('Follow up:');
+  lines.push((data.plan.followUp || '').replace(/^Follow up:\s*/i, '').trim() || labels.none_selected);
+  lines.push('');
+  lines.push('Education Game: https://pub-ac397c96ae2647d4a45221e91f4ce5dd.r2.dev/wja3qnv_Zc.html');
+  return lines.join('\n');
+}
+
+
+function calculate(){
+  const data = getAssessmentData();
+  const scoreEl = document.getElementById('score');
+  scoreEl.textContent = data.riskScore;
+  scoreEl.className = 'score' + (data.riskScore === 'URGENT' ? ' urgent' : '');
+  document.getElementById('riskStrip').textContent = data.plan.riskStrip;
+
+  const flags = [
+    `UrgentFlag: ${data.flags.UrgentFlag}`,
+    `LOPSFlag: ${data.flags.LOPSFlag}`,
+    `PADFlag: ${data.flags.PADFlag}`,
+    `DeformityFlag: ${data.flags.DeformityFlag}`,
+    `HistoryFlag: ${data.flags.HistoryFlag}`,
+    `ESRDFlag: ${data.flags.ESRDFlag}`
+  ];
+  document.getElementById('flags').innerHTML = flags.map(f => `<span class="badge">${escapeHtml(f)}</span>`).join('');
+
+  document.getElementById('metabolic').innerHTML = data.metabolic.length
+    ? `<ul>${data.metabolic.map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul>`
+    : `<span class="small">${escapeHtml(t('no_selected_factors_yet'))}</span>`;
+
+  document.getElementById('comb').innerHTML = data.comb.length
+    ? `<ul>${data.comb.map(x => `<li>${escapeHtml(x)}</li>`).join('')}</ul>`
+    : `<span class="small">${escapeHtml(t('no_selected_comb_risks_yet'))}</span>`;
+
+  document.getElementById('planTitle').textContent = data.plan.shortTitle;
+  document.getElementById('planText').textContent = data.plan.full;
+  document.getElementById('followUp').textContent = data.plan.followUp;
+  document.getElementById('finalReport').textContent = buildReportText();
+
+  updateProgress();
+  renderAssessmentHistory();
+}
+
+
+function getCurrentPatientObject(){
+  return getPatients().find(p => p.id === currentPatientId) || null;
+}
+
+function validateBeforeSave(){
+  const fields = getPatientFields();
+  const missing = [];
+  if(!fields.assessmentDate) missing.push('Assessment date');
+  if(!fields.patientName) missing.push('Patient name');
+  if(!fields.patientId) missing.push('Patient ID');
+  if(!fields.physician) missing.push('Physician');
+  if(Object.keys(answers).length === 0) missing.push('At least one answered question');
+  return missing;
+}
+
+function saveAssessment(){
+  const missing = validateBeforeSave();
+  const status = document.getElementById('status');
+  if(missing.length){
+    status.textContent = `Please complete: ${missing.join(', ')}.`;
+    status.style.color = 'var(--danger)';
+    return;
+  }
+
+  const patients = getPatients();
+  const fields = getPatientFields();
+  const data = getAssessmentData();
+
+  let patient = patients.find(p => p.id === currentPatientId);
+
+  if(!patient || creatingNewPatient){
+    patient = {
+      id: uid('patient'),
+      archived: false,
+      patientName: fields.patientName,
+      patientId: fields.patientId,
+      patientAge: fields.patientAge,
+      patientGender: fields.patientGender,
+      physician: fields.physician,
+      clinic: fields.clinic,
+      notes: fields.patientNotes,
+      latestRisk: data.riskScore,
+      assessments: []
+    };
+    patients.unshift(patient);
+    currentPatientId = patient.id;
+    creatingNewPatient = false;
+  }else{
+    patient.patientName = fields.patientName;
+    patient.patientId = fields.patientId;
+    patient.patientAge = fields.patientAge;
+    patient.patientGender = fields.patientGender;
+    patient.physician = fields.physician;
+    patient.clinic = fields.clinic;
+    patient.notes = fields.patientNotes;
+    patient.latestRisk = data.riskScore;
+  }
+
+  let assessment = patient.assessments.find(a => a.id === currentAssessmentId);
+  if(!assessment){
+    assessment = { id: uid('assessment') };
+    patient.assessments.unshift(assessment);
+    currentAssessmentId = assessment.id;
+  }
+
+  assessment.assessmentDate = fields.assessmentDate;
+  assessment.visitLabel = fields.visitLabel;
+  assessment.patientSnapshot = { ...fields };
+  assessment.answers = { ...answers };
+  assessment.riskScore = data.riskScore;
+  assessment.report = buildReportText();
+  assessment.updatedAt = new Date().toISOString();
+
+  patient.latestRisk = data.riskScore;
+  setPatients(patients);
+  renderPatientsList();
+  renderAssessmentHistory();
+  status.textContent = 'Assessment saved on this device.';
+  status.style.color = 'var(--success)';
+}
+
+function startNewPatient(){
+  creatingNewPatient = true;
+  currentPatientId = null;
+  currentAssessmentId = null;
+  resetForm(false);
+  renderPatientsList();
+  showAppView('workspace');
+  setStatusMessage('Ready for a new patient record.', 'var(--success)');
+}
+
+
+function openPatientPicker(){
+  const modal = document.getElementById('patientPickerModal');
+  if(!modal) return;
+  modal.classList.remove('hidden');
+  document.getElementById('patientPickerSearch').value = '';
+  renderPatientPickerList();
+}
+
+function closePatientPicker(){
+  const modal = document.getElementById('patientPickerModal');
+  if(modal) modal.classList.add('hidden');
+}
+
+function renderPatientPickerList(){
+  const holder = document.getElementById('patientPickerList');
+  if(!holder) return;
+  const query = (document.getElementById('patientPickerSearch').value || '').toLowerCase().trim();
+  let patients = getPatients().filter(p => !p.archived);
+  if(query){
+    patients = patients.filter(p =>
+      (p.patientName || '').toLowerCase().includes(query) ||
+      (p.patientId || '').toLowerCase().includes(query) ||
+      (p.physician || '').toLowerCase().includes(query) ||
+      (p.clinic || '').toLowerCase().includes(query)
+    );
+  }
+  patients.sort((a,b) => (a.patientName || '').localeCompare((b.patientName || ''), undefined, { sensitivity: 'base' }));
+
+  if(!patients.length){
+    holder.innerHTML = '<div class="small">No active patients match this search.</div>';
+    return;
+  }
+
+  holder.innerHTML = patients.map(patient => {
+    const latest = getLatestAssessmentForPatient(patient);
+    const visits = patient.assessments ? patient.assessments.length : 0;
+    return `
+      <div class="patient-item">
+        <h4>${escapeHtml(patient.patientName || 'Unnamed patient')}</h4>
+        <div class="small">ID: ${escapeHtml(patient.patientId || '—')} | Physician: ${escapeHtml(patient.physician || '—')}</div>
+        <div class="small">Latest status: ${escapeHtml(latest?.riskScore || patient.latestRisk || '—')} | Previous visits: ${visits}</div>
+        <div class="toolbar" style="margin-top:10px;">
+          <button class="primary" onclick="choosePatientForNewAssessment('${patient.id}')">Select patient</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+function choosePatientForNewAssessment(patientId){
+  openPatient(patientId);
+  closePatientPicker();
+  currentAssessmentId = null;
+  const patient = getCurrentPatientObject();
+  const fields = patient ? {
+    patientName: patient.patientName || '',
+    patientId: patient.patientId || '',
+    patientAge: patient.patientAge || '',
+    patientGender: patient.patientGender || '',
+    physician: patient.physician || '',
+    clinic: patient.clinic || '',
+    patientNotes: patient.notes || ''
+  } : {};
+  resetForm(false);
+  document.getElementById('patientName').value = fields.patientName || '';
+  document.getElementById('patientId').value = fields.patientId || '';
+  document.getElementById('patientAge').value = fields.patientAge || '';
+  document.getElementById('patientGender').value = fields.patientGender || '';
+  document.getElementById('physician').value = fields.physician || '';
+  document.getElementById('clinic').value = fields.clinic || '';
+  document.getElementById('patientNotes').value = fields.patientNotes || '';
+  setTodayDate();
+  updateSummary();
+  renderPatientsList();
+  showAppView('workspace');
+  setStatusMessage('Ready for a new assessment for the selected patient.', 'var(--success)');
+}
+
+function startNewAssessment(){
+  const activePatients = getPatients().filter(p => !p.archived);
+  if(!activePatients.length){
+    setStatusMessage('Create a patient first before starting a new assessment.', 'var(--danger)');
+    return;
+  }
+  openPatientPicker();
+}
+
+function clearQuestionAnswers(){
+  Object.keys(answers).forEach(key => delete answers[key]);
+  updateButtons();
+  calculate();
+  setStatusMessage('Question answers cleared. Patient information kept.', 'var(--success)');
+}
+
+function openPatient(patientId){
+  const patient = getPatients().find(p => p.id === patientId);
+  if(!patient) return;
+  currentPatientId = patient.id;
+  creatingNewPatient = false;
+
+  if(patient.assessments.length){
+    openAssessment(patient.id, patient.assessments[0].id);
+  }else{
+    resetForm(false);
+    document.getElementById('patientName').value = patient.patientName || '';
+    document.getElementById('patientId').value = patient.patientId || '';
+    document.getElementById('patientAge').value = patient.patientAge || '';
+    document.getElementById('patientGender').value = patient.patientGender || '';
+    document.getElementById('physician').value = patient.physician || '';
+    document.getElementById('clinic').value = patient.clinic || '';
+    document.getElementById('patientNotes').value = patient.notes || '';
+    setTodayDate();
+    updateSummary();
+    calculate();
+  }
+
+  renderPatientsList();
+  renderAssessmentHistory();
+  showAppView('workspace');
+}
+
+function openAssessment(patientId, assessmentId){
+  const patient = getPatients().find(p => p.id === patientId);
+  if(!patient) return;
+  const assessment = patient.assessments.find(a => a.id === assessmentId);
+  if(!assessment) return;
+
+  currentPatientId = patientId;
+  currentAssessmentId = assessmentId;
+  creatingNewPatient = false;
+
+  const snap = assessment.patientSnapshot || {};
+  document.getElementById('assessmentDate').value = snap.assessmentDate || '';
+  document.getElementById('patientName').value = snap.patientName || patient.patientName || '';
+  document.getElementById('patientId').value = snap.patientId || patient.patientId || '';
+  document.getElementById('patientAge').value = snap.patientAge || patient.patientAge || '';
+  document.getElementById('patientGender').value = snap.patientGender || patient.patientGender || '';
+  document.getElementById('physician').value = snap.physician || patient.physician || '';
+  document.getElementById('clinic').value = snap.clinic || patient.clinic || '';
+  document.getElementById('visitLabel').value = snap.visitLabel || assessment.visitLabel || '';
+  document.getElementById('patientNotes').value = snap.patientNotes || patient.notes || '';
+
+  Object.keys(answers).forEach(key => delete answers[key]);
+  Object.entries(assessment.answers || {}).forEach(([key, value]) => {
+    answers[Number(key)] = value;
+  });
+
+  updateButtons();
+  updateSummary();
+  calculate();
+  renderPatientsList();
+  renderAssessmentHistory();
+  showAppView('workspace');
+  setStatusMessage('Assessment loaded.', 'var(--success)');
+}
+
+function renderAssessmentHistory(){
+  const holder = document.getElementById('assessmentHistory');
+  const patient = getCurrentPatientObject();
+  if(!patient || !patient.assessments.length){
+    holder.innerHTML = '<div class="small">No saved assessments for the current patient.</div>';
+    return;
+  }
+  holder.innerHTML = patient.assessments.map(a => `
+    <div class="patient-item ${a.id === currentAssessmentId ? 'active' : ''}">
+      <h4>${escapeHtml(a.patientSnapshot?.visitLabel || 'Assessment')}</h4>
+      <div class="small">${escapeHtml(a.assessmentDate || '')} | Risk: ${escapeHtml(a.riskScore || '')}</div>
+      <div class="toolbar" style="margin-top:10px;">
+        <button onclick="openAssessment('${patient.id}', '${a.id}')">Open</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function archiveCurrentPatient(){
+  if(!currentPatientId){
+    document.getElementById('status').textContent = 'No patient selected.';
+    document.getElementById('status').style.color = 'var(--danger)';
+    return;
+  }
+  const patients = getPatients();
+  const patient = patients.find(p => p.id === currentPatientId);
+  if(!patient) return;
+  patient.archived = true;
+  setPatients(patients);
+  renderPatientsList();
+  document.getElementById('status').textContent = 'Patient archived.';
+  document.getElementById('status').style.color = 'var(--success)';
+}
+
+function renderPatientsList(){
+  updateCurrentPatientHub();
+  renderPatientDirectory();
+}
+
+function deletePatient(patientId){
+  const confirmed = window.confirm('Delete this patient and all local assessments on this device?');
+  if(!confirmed) return;
+  let patients = getPatients();
+  patients = patients.filter(p => p.id !== patientId);
+  setPatients(patients);
+
+  if(currentPatientId === patientId){
+    currentPatientId = null;
+    currentAssessmentId = null;
+    creatingNewPatient = true;
+    resetForm(false);
+  }
+  renderPatientsList();
+  renderAssessmentHistory();
+  document.getElementById('status').textContent = 'Patient deleted.';
+  document.getElementById('status').style.color = 'var(--success)';
+}
+
+function downloadReport(){
+  const text = buildReportText();
+  const blob = new Blob([text], { type: 'text/plain;charset=utf-8' });
+  const a = document.createElement('a');
+  const name = document.getElementById('patientName').value.trim() || 'patient';
+  a.href = URL.createObjectURL(blob);
+  a.download = `${name.replace(/[^a-z0-9]/gi,'_').toLowerCase()}_dfu_report.txt`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(a.href);
+  setStatusMessage('Report downloaded.', 'var(--success)');
+}
+
+function resetForm(confirmReset = true){
+  if(confirmReset && Object.keys(answers).length > 0){
+    const confirmed = window.confirm('Reset the form and clear the current assessment data?');
+    if(!confirmed) return;
+  }
+
+  document.getElementById('assessmentDate').value = '';
+  document.getElementById('patientName').value = '';
+  document.getElementById('patientId').value = '';
+  document.getElementById('patientAge').value = '';
+  document.getElementById('patientGender').value = '';
+  document.getElementById('physician').value = '';
+  document.getElementById('clinic').value = '';
+  document.getElementById('visitLabel').value = '';
+  document.getElementById('patientNotes').value = '';
+  Object.keys(answers).forEach(key => delete answers[key]);
+  fullPlanVisible = true;
+  currentAssessmentId = null;
+
+  setTodayDate();
+  updateSummary();
+  updateButtons();
+  calculate();
+
+  document.getElementById('status').textContent = 'Form reset and ready.';
+  document.getElementById('status').style.color = 'var(--success)';
+}
+
+function fillFormForTesting(yesIds){
+  Object.keys(answers).forEach(key => delete answers[key]);
+  updateSummary();
+  calculate();
+  allQuestions.forEach(q => {
+    answers[q.id] = yesIds.includes(q.id) ? 'yes' : 'no';
+  });
+  updateButtons();
+  calculate();
+  return getAssessmentData().riskScore;
+}
+
+function runSelfTests(){
+  const results = [];
+  results.push(['All yes -> URGENT', fillFormForTesting(allQuestions.map(q => q.id)) === 'URGENT']);
+  results.push(['LOPS only by Q13 -> 1', fillFormForTesting([13]) === '1']);
+  results.push(['PAD only by Q14 -> 1', fillFormForTesting([14]) === '1']);
+  results.push(['LOPS + PAD -> 2', fillFormForTesting([13,14]) === '2']);
+  results.push(['LOPS + deformity -> 2', fillFormForTesting([21,23]) === '2']);
+  results.push(['History Q1 alone -> 0', fillFormForTesting([1]) === '0']);
+  results.push(['LOPS + history -> 3', fillFormForTesting([13,1]) === '3']);
+  results.push(['PAD + ESRD -> 3', fillFormForTesting([14,7]) === '3']);
+  results.push(['Urgent by Q15 -> URGENT', fillFormForTesting([15]) === 'URGENT']);
+  results.push(['Q12 alone -> 0 after removing from LOPS', fillFormForTesting([12]) === '0']);
+  fillFormForTesting([]);
+  return results;
+}
+
+function bootstrap(){
+  if(!hasAccount()){
+    setLoginState(false);
+  }
+
+let lastSyncFingerprint = '';
+
+function getSyncFingerprint(){
+  return [
+    storage.getItem(STORAGE_KEYS.account) || '',
+    storage.getItem(STORAGE_KEYS.accounts) || '',
+    storage.getItem(STORAGE_KEYS.activeUser) || '',
+    storage.getItem(STORAGE_KEYS.patients) || '',
+    storage.getItem(STORAGE_KEYS.patientsByUser) || '',
+    storage.getItem(STORAGE_KEYS.login) || ''
+  ].join('||');
+}
+
+function applyExternalStateRefresh(){
+  renderPatientsList();
+  renderAssessmentHistory();
+  updateCurrentPatientHub();
+  const current = getCurrentPatientObject();
+  if(!current && !creatingNewPatient){
+    startNewPatient();
+  }else{
+    updateSummary();
+    calculate();
+  }
+}
+
+function notifyDataChanged(){
+  try{
+    lastSyncFingerprint = getSyncFingerprint();
+    storage.setItem('dfu_app_last_change_v4_20260419', String(Date.now()));
+  }catch(e){}
+  try{
+    if(window.dfuSyncChannel) window.dfuSyncChannel.postMessage({type:'state-changed', at: Date.now()});
+  }catch(e){}
+}
+
+function setupCrossTabSync(){
+  lastSyncFingerprint = getSyncFingerprint();
+
+  try{
+    if('BroadcastChannel' in window){
+      window.dfuSyncChannel = new BroadcastChannel('dfu_app_sync_channel');
+      window.dfuSyncChannel.onmessage = function(){
+        const nextFingerprint = getSyncFingerprint();
+        if(nextFingerprint !== lastSyncFingerprint){
+          lastSyncFingerprint = nextFingerprint;
+          applyExternalStateRefresh();
+        }
+      };
+    }
+  }catch(error){
+    console.warn('BroadcastChannel unavailable:', error);
+  }
+
+  window.addEventListener('storage', function(event){
+    if([STORAGE_KEYS.account, STORAGE_KEYS.accounts, STORAGE_KEYS.activeUser, STORAGE_KEYS.patients, STORAGE_KEYS.patientsByUser, STORAGE_KEYS.login, 'dfu_app_last_change_v4_20260419'].includes(event.key)){
+      const nextFingerprint = getSyncFingerprint();
+      if(nextFingerprint !== lastSyncFingerprint){
+        lastSyncFingerprint = nextFingerprint;
+        applyExternalStateRefresh();
+      }
+    }
+  });
+
+  setInterval(function(){
+    const nextFingerprint = getSyncFingerprint();
+    if(nextFingerprint !== lastSyncFingerprint){
+      lastSyncFingerprint = nextFingerprint;
+      applyExternalStateRefresh();
+    }
+  }, 2000);
+}
+
+migrateLegacyStorage();
+migrateSingleAccountToMulti();
+setupCrossTabSync();
+startRemoteSync();
+  renderQuestions();
+  setTodayDate();
+  updateSummary();
+  updateButtons();
+  calculate();
+  renderPatientsList();
+  renderAssessmentHistory();
+  showAppView('workspace');
+
+  [
+    'assessmentDate','patientName','patientId','patientAge','patientGender','physician','clinic','visitLabel','patientNotes'
+  ].forEach(id => {
+    document.getElementById(id).addEventListener('input', updateSummary);
+    document.getElementById(id).addEventListener('change', updateSummary);
+  });
+
+  [
+    ['loginUsername','login'],['loginPassword','login'],
+    ['signupUsername','signup'],['signupPassword','signup'],['signupConfirmPassword','signup'],
+    ['changeUsername','changePassword'],['currentPassword','changePassword'],['newPassword','changePassword'],['confirmPassword','changePassword'],
+    ['emergencyUsername','emergencyResetAccess'],['emergencyRecoveryCode','emergencyResetAccess'],['emergencyNewPassword','emergencyResetAccess'],['emergencyConfirmPassword','emergencyResetAccess']
+  ].forEach(([id, fnName]) => {
+    const field = document.getElementById(id);
+    if(!field) return;
+    field.addEventListener('keydown', event => {
+      if(event.key === 'Enter' && typeof window[fnName] === 'function'){
+        event.preventDefault();
+        window[fnName]();
+      }
+    });
+  });
+
+  if(!storage.getItem(STORAGE_KEYS.autoBackup) && (hasAccount() || getPatients().length)){
+    saveAutoBackup('bootstrap');
+  }
+  setupCrossWindowSync();
+  captureSyncSnapshot();
+  window.setInterval(() => saveAutoBackup('interval'), AUTO_BACKUP_INTERVAL_MS);
+
+  const tests = runSelfTests();
+  console.log('DFU self-tests:', tests);
+
+  const appScreen = document.getElementById('appScreen');
+  const authScreen = document.getElementById('authScreen');
+
+  // Always start on the login screen when the page is opened or refreshed.
+  // This keeps patient records safe on shared phones/tablets and prevents the app
+  // from jumping straight into the clinical form because of a saved local session.
+  setLoginState(false);
+  if(appScreen) appScreen.classList.add('hidden');
+  if(authScreen) authScreen.classList.remove('hidden');
+  showAuthScreen(hasAccount() ? 'login' : 'signup');
+
+  applyTranslations();
+  if(window.location.protocol === 'file:'){
+    console.info('Running from file:// mode with local account storage.');
+  }
+}
+
+restoreStateFromIndexedDBIfNeeded().finally(() => bootstrap());
+</script>
+</body>
+</html>
