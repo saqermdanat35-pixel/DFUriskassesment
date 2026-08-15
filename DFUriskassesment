@@ -1705,7 +1705,7 @@ const questionDomains = [
         title: 'Vascular exam',
         questions: [
           { id: 25, text: 'Is the hair growth on the foot dorsum or lower limb decreased?' },
-          { id: 26, text: 'Are the dorsalis pedis and posterior tibial pulses not palpable, with or without gangrene/ischemia?' },
+          { id: 26, text: 'Are the dorsalis pedis and posterior tibial pulses not palpable without gangrene/ischemia?' },
           { id: 27, text: 'Is there a temperature difference between the calves and feet, or between the left and right foot,ischemia,gangrene?' }
         ]
       },
